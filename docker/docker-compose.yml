@@ -1,9 +1,0 @@
-version: '3.8'
-
-services:
-  healthcare-db:
-    build: .
-    container_name: healthcare-db
-    volumes:
-      - ./data:/app/data
-    command: [ "sh", "-c", "sqlite3 /app/data/healthcare.db < /app/create_db.sql && tail -f /dev/null" ]
