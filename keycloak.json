@@ -1,0 +1,8 @@
+{
+    "realm": "medical-cabinet",
+    "auth-server-url": "http://localhost:8180",
+    "ssl-required": "external",
+    "resource": "medical-frontend",
+    "public-client": true,
+    "confidential-port": 0
+}

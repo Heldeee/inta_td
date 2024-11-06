@@ -1,11 +1,23 @@
 import Keycloak from 'keycloak-js';
 
-const keycloak = Keycloak('/keycloak.json');
+const keycloakConfig = {
+    url: 'http://localhost:8180',
+    realm: 'medical-cabinet',
+    clientId: 'medical-frontend'
+};
+
+const keycloakInstance = new Keycloak(keycloakConfig);
 
 export const initKeycloak = async () => {
     try {
-        await keycloak.init({ onLoad: 'check-sso' });
-        return keycloak;
+        const authenticated = await keycloakInstance.init({
+            onLoad: 'check-sso',
+            silentCheckSsoRedirectUri: window.location.origin + '/silent-check-sso.html',
+            pkceMethod: 'S256' // Recommandé pour la sécurité
+        });
+
+        console.log('Keycloak initialized:', authenticated ? 'Authenticated' : 'Not authenticated');
+        return authenticated;
     } catch (error) {
         console.error('Error initializing Keycloak:', error);
         throw error;
@@ -13,5 +25,12 @@ export const initKeycloak = async () => {
 };
 
 export const getKeycloakInstance = () => {
-    return keycloak;
+    return keycloakInstance;
 };
+
+// Fonctions utilitaires pour la gestion de l'authentification
+export const login = () => keycloakInstance.login();
+export const logout = () => keycloakInstance.logout();
+export const isAuthenticated = () => keycloakInstance.authenticated;
+export const getToken = () => keycloakInstance.token;
+export const getUserRoles = () => keycloakInstance.tokenParsed?.realm_access?.roles || [];
