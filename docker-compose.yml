@@ -1,0 +1,66 @@
+# docker-compose.yml
+version: '3.8'
+
+services:
+  frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "5173:5173" # Port par défaut de Vite en dev
+    environment:
+      - VITE_API_URL=http://localhost:8080
+      - VITE_KEYCLOAK_URL=http://localhost:8180
+      - VITE_KEYCLOAK_REALM=medical-cabinet
+      - VITE_KEYCLOAK_CLIENT_ID=medical-frontend
+    volumes:
+      - ./src:/app/src # Pour le hot reload en dev
+    depends_on:
+      - mongodb
+      - keycloak
+
+  mongodb:
+    image: mongo:latest
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongodb_data:/data/db
+      - ./mongo-init:/docker-entrypoint-initdb.d/
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=admin
+      - MONGO_INITDB_ROOT_PASSWORD=password
+      # Collections initiales pour les nomenclatures MOS/NOS
+      - MONGO_INITDB_DATABASE=medical_cabinet
+
+  keycloak:
+    image: quay.io/keycloak/keycloak:latest
+    environment:
+      - KEYCLOAK_ADMIN=admin
+      - KEYCLOAK_ADMIN_PASSWORD=admin
+      - KC_DB=postgres
+      - KC_DB_URL=jdbc:postgresql://postgres:5432/keycloak
+      - KC_DB_USERNAME=keycloak
+      - KC_DB_PASSWORD=password
+      # Configuration spécifique pour le cabinet médical
+      - KC_REALM_IMPORT=/opt/keycloak/data/import/realm-medical.json
+    ports:
+      - "8180:8080"
+    volumes:
+      - ./keycloak:/opt/keycloak/data/import
+    command:
+      - start-dev --realm-import=/opt/keycloak/data/import/realm-medical.json
+    depends_on:
+      - postgres
+
+  postgres:
+    image: postgres:13
+    environment:
+      - POSTGRES_DB=keycloak
+      - POSTGRES_USER=keycloak
+      - POSTGRES_PASSWORD=password
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+volumes:
+  mongodb_data:
+  postgres_data:
