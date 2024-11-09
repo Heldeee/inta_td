@@ -1,20 +1,21 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { getKeycloakInstance, isAuthenticated, getUserRoles, logout } from '../services/keycloakService';
+import { isAuthenticated, getUserRoles, logout } from '../services/keycloakService';
 import PatientInfo from './PatientInfo';
 import MedicalRecordsList from './MedicalRecordsList';
 import AlertsList from './AlertsList';
+import DeviceStatusPanel from './DeviceStatusPanel'; // New Component
+import PatientList from './PatientList'; // New Component for secretary view
 
 const DashboardPage = () => {
     const navigate = useNavigate();
     const [patient, setPatient] = useState(null);
     const [medicalRecords, setMedicalRecords] = useState([]);
     const [alerts, setAlerts] = useState([]);
-    const [userRole, setUserRole] = useState(null);
+    const [userRole, setUserRole] = useState([]);
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        // Vérifier l'authentification
         if (!isAuthenticated()) {
             navigate('/login');
             return;
@@ -24,32 +25,26 @@ const DashboardPage = () => {
             try {
                 setLoading(true);
                 const roles = getUserRoles();
-                setUserRole(roles[0]); // Prend le premier rôle comme rôle principal
+                if (!roles.length) {
+                    navigate('/unauthorized');
+                    return;
+                }
+                setUserRole(roles);
 
-                // Simulons la récupération des données (à remplacer par vos appels API réels)
-                // Différentes données selon le rôle
+                console.log('User roles:', roles);
+
+                // Simulate data fetching based on roles
                 if (roles.includes('doctor')) {
-                    // Données pour les médecins
-                    setPatient({
-                        id: 1,
-                        name: "John Doe",
-                        age: 45,
-                        lastVisit: "2024-03-15"
-                    });
+                    // Doctor-specific data
+                    setPatient({ id: 1, name: "John Doe", age: 45, lastVisit: "2024-03-15" });
                     setMedicalRecords([
-                        { id: 1, date: "2024-03-15", type: "Consultation", description: "Contrôle tension" },
-                        { id: 2, date: "2024-02-15", type: "ECG", description: "ECG de routine" }
+                        { id: 1, date: "2024-03-15", type: "Consultation", description: "Routine check-up" },
+                        { id: 2, date: "2024-02-15", type: "ECG", description: "Routine ECG" }
                     ]);
-                    setAlerts([
-                        { id: 1, severity: "high", message: "Tension élevée détectée", timestamp: "2024-03-16T10:30:00" }
-                    ]);
+                    setAlerts([{ id: 1, severity: "high", message: "High blood pressure detected", timestamp: "2024-03-16T10:30:00" }]);
                 } else if (roles.includes('secretary')) {
-                    // Données limitées pour le secrétariat
-                    setPatient({
-                        id: 1,
-                        name: "John Doe",
-                        age: 45
-                    });
+                    // Secretary-specific data
+                    setPatient({ id: 1, name: "John Doe", age: 45 });
                     setMedicalRecords([
                         { id: 1, date: "2024-03-15", type: "Consultation" },
                         { id: 2, date: "2024-02-15", type: "ECG" }
@@ -71,64 +66,47 @@ const DashboardPage = () => {
     };
 
     if (loading) {
-        return <div>Chargement...</div>;
+        return <div>Loading...</div>;
     }
 
     return (
-        <div style={{ padding: '20px' }}>
-            <div style={{
-                display: 'flex',
-                justifyContent: 'space-between',
-                alignItems: 'center',
-                marginBottom: '20px'
-            }}>
-                <h1>Tableau de bord - {userRole === 'doctor' ? 'Médecin' : 'Secrétariat'}</h1>
-                <button
-                    onClick={handleLogout}
-                    style={{
-                        padding: '8px 16px',
-                        backgroundColor: '#dc3545',
-                        color: 'white',
-                        border: 'none',
-                        borderRadius: '4px',
-                        cursor: 'pointer'
-                    }}
-                >
-                    Déconnexion
-                </button>
-            </div>
+        <div style={{ display: 'flex', padding: '20px' }}>
+            <aside style={{ width: '20%', padding: '20px', borderRight: '1px solid #ddd' }}>
+                <h2>Navigation</h2>
+                <button onClick={handleLogout} style={{ backgroundColor: 'lightcoral' }}>Logout</button>
+                <div>User Role: {userRole.join(', ')}</div>
+            </aside>
 
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px' }}>
-                <div style={{
-                    padding: '20px',
-                    backgroundColor: 'white',
-                    borderRadius: '8px',
-                    boxShadow: '0 2px 4px rgba(0,0,0,0.1)'
-                }}>
-                    <PatientInfo patient={patient} />
-                </div>
+            <main style={{ width: '80%', padding: '20px' }}>
+                <h1>Dashboard - {userRole.includes('doctor') ? 'Doctor' : 'Secretary'}</h1>
 
-                <div style={{
-                    padding: '20px',
-                    backgroundColor: 'white',
-                    borderRadius: '8px',
-                    boxShadow: '0 2px 4px rgba(0,0,0,0.1)'
-                }}>
-                    <MedicalRecordsList records={medicalRecords} />
-                </div>
-
-                {userRole === 'doctor' && (
-                    <div style={{
-                        gridColumn: '1 / -1',
-                        padding: '20px',
-                        backgroundColor: 'white',
-                        borderRadius: '8px',
-                        boxShadow: '0 2px 4px rgba(0,0,0,0.1)'
-                    }}>
-                        <AlertsList alerts={alerts} />
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px' }}>
+                    <div style={{ padding: '20px', backgroundColor: 'white', borderRadius: '8px' }}>
+                        <PatientInfo patient={patient} />
                     </div>
-                )}
-            </div>
+
+                    <div style={{ padding: '20px', backgroundColor: 'white', borderRadius: '8px' }}>
+                        <MedicalRecordsList records={medicalRecords} />
+                    </div>
+
+                    {userRole.includes('doctor') && (
+                        <>
+                            <div style={{ gridColumn: '1 / -1', padding: '20px', backgroundColor: 'white', borderRadius: '8px' }}>
+                                <AlertsList alerts={alerts} />
+                            </div>
+                            <div style={{ padding: '20px', backgroundColor: 'white', borderRadius: '8px' }}>
+                                <DeviceStatusPanel />
+                            </div>
+                        </>
+                    )}
+
+                    {userRole.includes('secretary') && (
+                        <div style={{ gridColumn: '1 / -1', padding: '20px', backgroundColor: 'white', borderRadius: '8px' }}>
+                            <PatientList />
+                        </div>
+                    )}
+                </div>
+            </main>
         </div>
     );
 };

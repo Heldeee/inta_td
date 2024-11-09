@@ -8,6 +8,18 @@ const keycloakConfig = {
 
 const keycloakInstance = new Keycloak(keycloakConfig);
 
+export const getToken = async () => {
+    if (keycloakInstance.isTokenExpired()) {
+        try {
+            await keycloakInstance.updateToken(30); // Refreshes if token expires within 30 seconds
+        } catch (error) {
+            console.error("Failed to refresh Keycloak token:", error);
+            login(); // Redirect to login if refresh fails
+        }
+    }
+    return keycloakInstance.token;
+};
+
 export const initKeycloak = async () => {
     try {
         const authenticated = await keycloakInstance.init({
@@ -32,5 +44,4 @@ export const getKeycloakInstance = () => {
 export const login = () => keycloakInstance.login();
 export const logout = () => keycloakInstance.logout();
 export const isAuthenticated = () => keycloakInstance.authenticated;
-export const getToken = () => keycloakInstance.token;
 export const getUserRoles = () => keycloakInstance.tokenParsed?.realm_access?.roles || [];

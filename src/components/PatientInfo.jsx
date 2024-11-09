@@ -12,9 +12,13 @@ const PatientInfo = ({ patient }) => {
             <p>Date of Birth: {patient.dateOfBirth}</p>
             <h3>Connected Devices</h3>
             <ul>
-                {patient.medicalDevices.map((device) => (
-                    <li key={device.id}>{device.type} - ID: {device.id}</li>
-                ))}
+                {patient.medicalDevices && patient.medicalDevices.length > 0 ? (
+                    patient.medicalDevices.map((device) => (
+                        <li key={device.id}>{device.type} - ID: {device.id}</li>
+                    ))
+                ) : (
+                    <li>No connected devices found.</li>
+                )}
             </ul>
         </div>
     );
