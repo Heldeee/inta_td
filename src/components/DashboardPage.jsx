@@ -4,7 +4,7 @@ import { getKeycloakInstance, isAuthenticated, getUserRoles, logout } from '../s
 import PatientInfo from './PatientInfo';
 import MedicalRecordsList from './MedicalRecordsList';
 import AlertsList from './AlertsList';
-import AddPatientForn from './AddPatientForm';
+import AddPatientForm from './AddPatientForm';
 
 const DashboardPage = () => {
     const navigate = useNavigate();
@@ -13,6 +13,17 @@ const DashboardPage = () => {
     const [alerts, setAlerts] = useState([]);
     const [userRole, setUserRole] = useState(null);
     const [loading, setLoading] = useState(true);
+    const [isAddPatientModalOpen, setAddPatientModalOpen] = useState(false);
+
+    // Function to open the modal
+    const openAddPatientModal = () => {
+        setAddPatientModalOpen(true);
+    };
+
+    // Function to close the modal
+    const closeAddPatientModal = () => {
+        setAddPatientModalOpen(false);
+    };
 
     useEffect(() => {
         // Vérifier l'authentification
@@ -81,7 +92,10 @@ const DashboardPage = () => {
                     boxShadow: '0 2px 4px rgba(0,0,0,0.1)'
                 }}>
                     <PatientInfo patient={patient} />
-                    {userRole === 'secretary' && <AddPatientForn />}
+                    <button onClick={openAddPatientModal}>Add Patient</button>
+
+                    {/* Render the AddPatientForm modal if it is open */}
+                    {isAddPatientModalOpen && <AddPatientForm onClose={closeAddPatientModal} />}
                 </div>
 
                 <div style={{
