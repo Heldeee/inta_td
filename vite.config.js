@@ -11,5 +11,13 @@ export default defineConfig({
   preview: {
     port: 5173,
     host: true
-  }
+  },
+  proxy: {
+    '/api': {
+      target: 'http://localhost:5000',
+      changeOrigin: true,
+      rewrite: (path) => path.replace(/^\/api/, ''),
+    },
+  },
+
 });

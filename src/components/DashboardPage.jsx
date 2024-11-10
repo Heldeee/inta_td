@@ -4,6 +4,7 @@ import { getKeycloakInstance, isAuthenticated, getUserRoles, logout } from '../s
 import PatientInfo from './PatientInfo';
 import MedicalRecordsList from './MedicalRecordsList';
 import AlertsList from './AlertsList';
+import AddPatientForn from './AddPatientForm';
 
 const DashboardPage = () => {
     const navigate = useNavigate();
@@ -28,33 +29,7 @@ const DashboardPage = () => {
 
                 // Simulons la récupération des données (à remplacer par vos appels API réels)
                 // Différentes données selon le rôle
-                if (roles.includes('doctor')) {
-                    // Données pour les médecins
-                    setPatient({
-                        id: 1,
-                        name: "John Doe",
-                        age: 45,
-                        lastVisit: "2024-03-15"
-                    });
-                    setMedicalRecords([
-                        { id: 1, date: "2024-03-15", type: "Consultation", description: "Contrôle tension" },
-                        { id: 2, date: "2024-02-15", type: "ECG", description: "ECG de routine" }
-                    ]);
-                    setAlerts([
-                        { id: 1, severity: "high", message: "Tension élevée détectée", timestamp: "2024-03-16T10:30:00" }
-                    ]);
-                } else if (roles.includes('secretary')) {
-                    // Données limitées pour le secrétariat
-                    setPatient({
-                        id: 1,
-                        name: "John Doe",
-                        age: 45
-                    });
-                    setMedicalRecords([
-                        { id: 1, date: "2024-03-15", type: "Consultation" },
-                        { id: 2, date: "2024-02-15", type: "ECG" }
-                    ]);
-                }
+                console.log(roles)
 
                 setLoading(false);
             } catch (error) {
@@ -106,6 +81,7 @@ const DashboardPage = () => {
                     boxShadow: '0 2px 4px rgba(0,0,0,0.1)'
                 }}>
                     <PatientInfo patient={patient} />
+                    {userRole === 'secretary' && <AddPatientForn />}
                 </div>
 
                 <div style={{

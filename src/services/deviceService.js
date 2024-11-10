@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { getKeycloakInstance } from './keycloakService';
 
-const API_URL = 'http://localhost:8080/api/devices';
+const API_URL = 'http://localhost:5000/api/devices';
 
 export const getDevices = async (patientId) => {
     try {
