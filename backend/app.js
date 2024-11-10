@@ -1,17 +1,23 @@
-const express = require('express');
-require('dotenv').config();
-const mongoose = require('mongoose');
-const patientRoutes = require('./routes/patientsRoutes');
-const deviceRoutes = require('./routes/devicesRoutes');
-const medicalRecordRoutes = require('./routes/medicalRecordsRoutes');
-const professionalRoutes = require('./routes/professionalsRoutes');
+import express from 'express';
+import dotenv from 'dotenv';
+import mongoose from 'mongoose';
+import patientRoutes from './routes/patientsRoutes.js';
+import deviceRoutes from './routes/devicesRoutes.js';
+import medicalRecordRoutes from './routes/medicalRecordsRoutes.js';
+import professionalRoutes from './routes/professionalsRoutes.js';
+
+dotenv.config();
 
 const app = express();
+
+const uri = process.env.MONGODB_URI;
+
+console.log(uri);
 
 app.use(express.json());
 
 // Connect to MongoDB
-mongoose.connect(process.env.MONGO_URI, {
+mongoose.connect(uri, {
     useNewUrlParser: true,
     useUnifiedTopology: true
 }).then(() => console.log("MongoDB connected"))
@@ -23,5 +29,5 @@ app.use('/api/devices', deviceRoutes);
 app.use('/api/medical-records', medicalRecordRoutes);
 app.use('/api/professionals', professionalRoutes);
 
-const PORT = process.env.PORT || 8080;
+const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));

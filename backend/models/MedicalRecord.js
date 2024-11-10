@@ -1,4 +1,4 @@
-const mongoose = require('mongoose');
+import mongoose from 'mongoose';
 
 const medicalRecordSchema = new mongoose.Schema({
     patientId: { type: String, required: true },
@@ -7,4 +7,5 @@ const medicalRecordSchema = new mongoose.Schema({
     notes: String
 });
 
-module.exports = mongoose.model('MedicalRecord', medicalRecordSchema);
+const MedicalRecord = mongoose.model('MedicalRecord', medicalRecordSchema);
+export default MedicalRecord;

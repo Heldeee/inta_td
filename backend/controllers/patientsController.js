@@ -1,7 +1,7 @@
-const Patient = require('../models/Patient');
+import Patient from '../models/Patient.js';
 
 // Get patient data by ID
-const getPatientInfo = async (req, res) => {
+export const getPatientInfo = async (req, res) => {
     try {
         const patient = await Patient.findOne({ idNos: req.params.id });
         if (!patient) {
@@ -15,7 +15,7 @@ const getPatientInfo = async (req, res) => {
 };
 
 // Get list of all patients
-const getAllPatients = async (req, res) => {
+export const getAllPatients = async (req, res) => {
     try {
         const patients = await Patient.find();
         res.json(patients);
@@ -23,9 +23,4 @@ const getAllPatients = async (req, res) => {
         console.error('Error fetching patients list:', error);
         res.status(500).json({ error: 'Internal server error' });
     }
-};
-
-module.exports = {
-    getPatientInfo,
-    getAllPatients
 };

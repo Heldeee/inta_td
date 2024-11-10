@@ -8,7 +8,7 @@ const DeviceStatusPanel = () => {
     useEffect(() => {
         const fetchDeviceData = async () => {
             try {
-                const response = await fetch('http://localhost:8080/api/devices'); // Update this to your actual API URL
+                const response = await fetch('http://localhost:3000/api/devices'); // Update this to your actual API URL
                 if (!response.ok) {
                     throw new Error(`Error fetching data: ${response.statusText}`);
                 }

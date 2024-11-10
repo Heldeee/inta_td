@@ -2,7 +2,7 @@
 import axios from 'axios';
 import { getKeycloakInstance } from './keycloakService';
 
-const API_URL = 'http://localhost:8080/api/medical-records';
+const API_URL = 'http://localhost:3000/api/medical-records';
 
 // Retrieve all medical records for a given patient
 export const getMedicalRecords = async (patientId) => {

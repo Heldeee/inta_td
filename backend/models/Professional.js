@@ -1,10 +1,11 @@
-const mongoose = require('mongoose');
+import mongoose from 'mongoose';
 
 const professionalSchema = new mongoose.Schema({
     idNos: { type: String, unique: true, required: true },
     name: String,
-    role: String, // e.g., Cardiologist, Nurse
+    role: String,
     specialization: String
 });
 
-module.exports = mongoose.model('Professional', professionalSchema);
+const Professional = mongoose.model('Professional', professionalSchema);
+export default Professional;

@@ -1,8 +1,8 @@
-const express = require('express');
+import express from 'express';
 const router = express.Router();
-const { getPatientInfo, getAllPatients } = require('../controllers/patientsController');
+import { getPatientInfo, getAllPatients } from '../controllers/patientsController.js';
 
 router.get('/:id', getPatientInfo); // Get specific patient by ID
 router.get('/', getAllPatients); // Get all patients
 
-module.exports = router;
+export default router;

@@ -1,7 +1,7 @@
-const MedicalRecord = require('../models/MedicalRecord');
+import MedicalRecord from '../models/MedicalRecord.js';
 
 // Get a patient's medical records
-const getMedicalRecordsByPatientId = async (req, res) => {
+export const getMedicalRecordsByPatientId = async (req, res) => {
     try {
         const records = await MedicalRecord.find({ patientId: req.params.patientId });
         res.json(records);
@@ -9,8 +9,4 @@ const getMedicalRecordsByPatientId = async (req, res) => {
         console.error('Error fetching medical records:', error);
         res.status(500).json({ error: 'Internal server error' });
     }
-};
-
-module.exports = {
-    getMedicalRecordsByPatientId
 };

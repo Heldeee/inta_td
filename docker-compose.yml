@@ -8,12 +8,11 @@ services:
     ports:
       - "5173:5173" # Port for Vite dev server
     environment:
-      - VITE_API_URL=http://backend:8080 # Backend service URL
+      - VITE_API_URL=http://backend:3000
       - VITE_KEYCLOAK_URL=http://keycloak:8080
       - VITE_KEYCLOAK_REALM=medical-cabinet
       - VITE_KEYCLOAK_CLIENT_ID=medical-frontend
     depends_on:
-      - backend
       - keycloak
     volumes:
       - ./src:/app/src # Enables hot-reload in dev mode
@@ -23,7 +22,7 @@ services:
       context: .
       dockerfile: Dockerfile.backend
     ports:
-      - "8080:8080" # Backend API server port
+      - "3000:3000" # Backend API server port
     environment:
       - MONGODB_URI=mongodb://admin:password@mongodb:27017/medical_cabinet
       - KEYCLOAK_URL=http://keycloak:8080
@@ -43,7 +42,8 @@ services:
       - MONGO_INITDB_DATABASE=medical_cabinet
     volumes:
       - mongodb_data:/data/db
-      - ./mongo-init:/docker-entrypoint-initdb.d/ # For initialization scripts
+      - ./mongo-init:/docker-entrypoint-initdb.d/
+    command: [ "--auth", "--logpath", "/var/log/mongodb/mongo.log", "--logappend" ]
 
   keycloak:
     image: quay.io/keycloak/keycloak:latest
@@ -63,6 +63,8 @@ services:
     command: [ "start-dev", "--import-realm" ]
     depends_on:
       - postgres
+    logging:
+      driver: "none"
 
   postgres:
     image: postgres:13
@@ -77,6 +79,10 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
+
+networks:
+  app-network:
+    driver: bridge
 
 volumes:
   mongodb_data:
