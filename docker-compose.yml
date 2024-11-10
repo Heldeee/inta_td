@@ -8,12 +8,13 @@ services:
     ports:
       - "5173:5173" # Port for Vite dev server
     environment:
-      - VITE_API_URL=http://backend:3000
+      - VITE_API_URL=http://backend:5000
       - VITE_KEYCLOAK_URL=http://keycloak:8080
       - VITE_KEYCLOAK_REALM=medical-cabinet
       - VITE_KEYCLOAK_CLIENT_ID=medical-frontend
     depends_on:
       - keycloak
+      - backend
     volumes:
       - ./src:/app/src # Enables hot-reload in dev mode
 
@@ -22,7 +23,7 @@ services:
       context: .
       dockerfile: Dockerfile.backend
     ports:
-      - "3000:3000" # Backend API server port
+      - "5000:5000" # Backend API server port
     environment:
       - MONGODB_URI=mongodb://admin:password@mongodb:27017/medical_cabinet
       - KEYCLOAK_URL=http://keycloak:8080
@@ -77,10 +78,6 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
-
-networks:
-  app-network:
-    driver: bridge
 
 volumes:
   mongodb_data:

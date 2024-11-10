@@ -14,7 +14,7 @@ RUN npm install
 COPY ./backend /app
 
 # Expose the backend API port
-EXPOSE 3000
+EXPOSE 5000
 
 # Run the backend server
 CMD ["node", "app.js"]
