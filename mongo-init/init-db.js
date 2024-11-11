@@ -1,13 +1,13 @@
 db.createCollection('professionals');
 db.createCollection('patients');
-db.createCollection('medical_records');
-db.createCollection('device_data');
+db.createCollection('medicalrecords');
+db.createCollection('medicaldevices');
 
 // Création des index
 db.professionals.createIndex({ "idNos": 1 }, { unique: true });
 db.patients.createIndex({ "idNos": 1 }, { unique: true });
-db.medical_records.createIndex({ "patientId": 1 });
-db.device_data.createIndex({ "patientId": 1, "timestamp": 1 });
+db.medicalrecords.createIndex({ "patientId": 1 });
+db.medicaldevices.createIndex({ "patientId": 1, "timestamp": 1 });
 
 // Insertion des nomenclatures NOS
 db.nos_nomenclatures.insertMany([
@@ -23,34 +23,45 @@ db.nos_nomenclatures.insertMany([
     }
 ]);
 
-db.device_data.insertMany([
+db.professionals.insertMany([
     {
-        "patientId": "patient1",
-        "timestamp": new Date(),
-        "data": {
-            "systolic": 120,
-            "diastolic": 80
+        "idNos": "12345",
+        "name": "Dr. John Doe",
+        "role": "Cardiologist",
+        "specialization": "Heart Disease"
+    },
+    {
+        "idNos": "12346",
+        "name": "Dr. Jane Smith",
+        "role": "Cardiologist",
+        "specialization": "Heart Disease"
+    }
+]);
+
+db.patients.insertMany([
+    {
+        "idNos": "26218",
+        "name": "Alice Smith",
+        "dateOfBirth": "1990-01-01T00:00:00Z",
+        "keycloakId": "12345",
+        "urgentContact": {
+            "name": "Bob Smith",
+            "phoneNumber": "123-456-7890"
         }
     },
     {
-        "patientId": "patient2",
-        "timestamp": new Date(),
-        "data": {
-            "systolic": 125,
-            "diastolic": 85
-        }
-    },
-    {
-        "patientId": "1",
-        "timestamp": new Date(),
-        "data": {
-            "systolic": 130,
-            "diastolic": 90
+        "idNos": "26219",
+        "name": "Bob Smith",
+        "dateOfBirth": "1990-01-01T00:00:00Z",
+        "keycloakId": "12346",
+        "urgentContact": {
+            "name": "Alice Smith",
+            "phoneNumber": "123-456-7890"
         }
     }
 ]);
 
-db.medical_records.insertMany([
+db.medicalrecords.insertMany([
     {
         "patientIdNos": "26218",
         "recordDate": "2024-11-11T00:00:00Z",
