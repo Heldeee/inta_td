@@ -22,3 +22,39 @@ db.nos_nomenclatures.insertMany([
         "type": "diagnosis"
     }
 ]);
+
+db.device_data.insertMany([
+    {
+        "patientId": "patient1",
+        "timestamp": new Date(),
+        "data": {
+            "systolic": 120,
+            "diastolic": 80
+        }
+    },
+    {
+        "patientId": "patient2",
+        "timestamp": new Date(),
+        "data": {
+            "systolic": 125,
+            "diastolic": 85
+        }
+    },
+    {
+        "patientId": "1",
+        "timestamp": new Date(),
+        "data": {
+            "systolic": 130,
+            "diastolic": 90
+        }
+    }
+]);
+
+db.medical_records.insertMany([
+    {
+        "patientId": "patient1",
+        "timestamp": new Date(),
+        "nomenclatureId": "1.2.250.1.213.3.3.11/934",
+        "value": 120
+    }
+]);

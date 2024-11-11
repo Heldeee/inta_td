@@ -42,3 +42,19 @@ export const createMedicalRecord = async (req, res) => {
         res.status(500).json({ error: 'Internal server error' });
     }
 };
+
+// Get all medical records
+export const getAllMedicalRecords = async (req, res) => {
+    try {
+        const records = await MedicalRecord.find();
+
+        if (records.length === 0) {
+            return res.status(404).json({ message: 'No records found.' });
+        }
+
+        res.json(records);
+    } catch (error) {
+        console.error('Error fetching medical records:', error);
+        res.status(500).json({ error: 'Internal server error' });
+    }
+};

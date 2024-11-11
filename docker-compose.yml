@@ -14,7 +14,7 @@ services:
       - VITE_KEYCLOAK_REALM=medical-cabinet
       - VITE_KEYCLOAK_CLIENT_ID=medical-frontend
     volumes:
-      - ./src:/app/src # Pour le hot reload en dev
+      - ./src:/app/src
     depends_on:
       - mongodb
       - keycloak
@@ -26,7 +26,7 @@ services:
     ports:
       - "5000:5000"
     volumes:
-      - ./src:/app/src # Pour le hot reload en dev
+      - ./src:/app/src
 
   mongodb:
     image: mongo:latest
@@ -37,7 +37,8 @@ services:
       - ./mongo-init:/docker-entrypoint-initdb.d/
     environment:
       - MONGO_INITDB_DATABASE=medical_cabinet
-    command: [ "--noauth", "--logpath", "/var/log/mongodb/mongo.log", "--logappend" ]
+    command: [ "--noauth" ]
+    restart: always
 
   keycloak:
     image: quay.io/keycloak/keycloak:latest

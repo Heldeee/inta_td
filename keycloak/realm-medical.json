@@ -28,5 +28,62 @@
                 "http://localhost:5173"
             ]
         }
+    ],
+    "users": [
+        {
+            "username": "doctor1",
+            "enabled": true,
+            "credentials": [
+                {
+                    "type": "password",
+                    "value": "password"
+                }
+            ],
+            "realmRoles": [
+                "doctor"
+            ]
+        },
+        {
+            "username": "doctor2",
+            "enabled": true,
+            "firstName": "Jean",
+            "lastName": "Clenche",
+            "email": "doctor1@example.com",
+            "credentials": [
+                {
+                    "type": "password",
+                    "value": "password"
+                }
+            ],
+            "realmRoles": [
+                "doctor"
+            ]
+        },
+        {
+            "username": "secretary1",
+            "enabled": true,
+            "credentials": [
+                {
+                    "type": "password",
+                    "value": "password"
+                }
+            ],
+            "realmRoles": [
+                "secretary"
+            ]
+        },
+        {
+            "username": "patient1",
+            "enabled": true,
+            "credentials": [
+                {
+                    "type": "password",
+                    "value": "password"
+                }
+            ],
+            "realmRoles": [
+                "patient"
+            ]
+        }
     ]
 }
