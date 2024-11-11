@@ -21,7 +21,7 @@ const DashboardPage = () => {
     const [alerts, setAlerts] = useState([]);
     const [userRole, setUserRole] = useState(null);
     const [loading, setLoading] = useState(true);
-    const [isAddPatientModalOpen, setAddPatientModalOpen] = useState(false);
+    const [isAddPatientModalOpen, setIsAddPatientModalOpen] = useState(false);
     const [isAddDeviceModalOpen, setIsAddDeviceModalOpen] = useState(false);
 
     const openAddPatientModal = () => setIsAddPatientModalOpen(true);
@@ -75,7 +75,7 @@ const DashboardPage = () => {
                 alignItems: 'center',
                 marginBottom: '20px'
             }}>
-                <h1>Dashboard- {userRole === 'doctor' ? 'Doctor' : 'Secretary'}</h1>
+                <h1>Dashboard - {userRole === 'doctor' ? 'Doctor' : 'Secretary'}</h1>
                 <button
                     onClick={handleLogout}
                     style={{
