@@ -25,6 +25,8 @@ services:
       dockerfile: Dockerfile.backend
     ports:
       - "5000:5000"
+    volumes:
+      - ./src:/app/src # Pour le hot reload en dev
 
   mongodb:
     image: mongo:latest

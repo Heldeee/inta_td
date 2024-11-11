@@ -1,10 +1,17 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { getKeycloakInstance, isAuthenticated, getUserRoles, logout } from '../services/keycloakService';
+import {
+    getKeycloakInstance,
+    isAuthenticated,
+    getUserRoles,
+    logout,
+    getToken
+} from '../services/keycloakService';
 import PatientInfo from './PatientInfo';
 import MedicalRecordsList from './MedicalRecordsList';
 import AlertsList from './AlertsList';
 import AddPatientForm from './AddPatientForm';
+import PatientDashboard from './PatientDashboard';
 
 const DashboardPage = () => {
     const navigate = useNavigate();
@@ -36,11 +43,9 @@ const DashboardPage = () => {
             try {
                 setLoading(true);
                 const roles = getUserRoles();
-                setUserRole(roles[0]); // Prend le premier rôle comme rôle principal
-
-                // Simulons la récupération des données (à remplacer par vos appels API réels)
-                // Différentes données selon le rôle
-                console.log(roles)
+                const token = getToken();
+                setUserRole(roles[0]);
+                console.log(roles);
 
                 setLoading(false);
             } catch (error) {
@@ -60,6 +65,10 @@ const DashboardPage = () => {
         return <div>Chargement...</div>;
     }
 
+    if (userRole === 'patient') {
+        return <PatientDashboard />;
+    }
+
     return (
         <div style={{ padding: '20px' }}>
             <div style={{
@@ -68,7 +77,7 @@ const DashboardPage = () => {
                 alignItems: 'center',
                 marginBottom: '20px'
             }}>
-                <h1>Tableau de bord - {userRole === 'doctor' ? 'Médecin' : 'Secrétariat'}</h1>
+                <h1>Dashboard- {userRole === 'doctor' ? 'Doctor' : 'Secretary'}</h1>
                 <button
                     onClick={handleLogout}
                     style={{
@@ -94,7 +103,6 @@ const DashboardPage = () => {
                     <PatientInfo patient={patient} />
                     <button onClick={openAddPatientModal}>Add Patient</button>
 
-                    {/* Render the AddPatientForm modal if it is open */}
                     {isAddPatientModalOpen && <AddPatientForm onClose={closeAddPatientModal} />}
                 </div>
 

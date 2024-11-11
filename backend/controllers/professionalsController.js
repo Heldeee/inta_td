@@ -13,3 +13,14 @@ export const getProfessionalInfo = async (req, res) => {
         res.status(500).json({ error: 'Internal server error' });
     }
 };
+
+// Get all professionals
+export const getAllProfessionals = async (req, res) => {
+    try {
+        const professionals = await Professional.find();
+        res.json(professionals);
+    } catch (error) {
+        console.error('Error fetching professionals:', error);
+        res.status(500).json({ error: 'Internal server error' });
+    }
+};

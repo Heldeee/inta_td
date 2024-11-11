@@ -6,33 +6,32 @@ const AddPatientForm = ({ onClose }) => {
         idNos: '',
         name: '',
         dateOfBirth: '',
-        medicalDevices: [], // No devices by default
-        doctorId: '' // To store the selected doctor's ID
+        medicalDevices: [] // No devices by default
     });
 
-    const [doctors, setDoctors] = useState([]); // To store list of doctors
-
     useEffect(() => {
-        // Fetch doctors from the backend
-        const fetchDoctors = async () => {
-            try {
-                const response = await axios.get('http://localhost:5000/api/professionals'); // Replace with your API endpoint
-                setDoctors(response.data);
-            } catch (error) {
-                console.error('Error fetching doctors:', error);
-            }
-        };
-
-        fetchDoctors();
-
         // Generate a random ID number when form loads
         const generateIdNumber = () => {
             setFormData((prevState) => ({
                 ...prevState,
-                idNos: Math.floor(Math.random() * 1000000).toString() // Example random ID
+                idNos: Math.floor(Math.random() * 1000000).toString() // example random ID
             }));
         };
         generateIdNumber();
+
+        const generateAlphaNumericId = (length = 10) => {
+            const chars = 'abcdefghijklmnopqrstuvwxyz0123456789';
+            let result = '';
+            for (let i = 0; i < length; i++) {
+                result += chars.charAt(Math.floor(Math.random() * chars.length));
+            }
+            setFormData((prevState) => ({
+                ...prevState,
+                keycloakId: result
+            }));
+        };
+
+        generateAlphaNumericId();
     }, []);
 
     const handleChange = (e) => {
@@ -71,28 +70,16 @@ const AddPatientForm = ({ onClose }) => {
     const handleSubmit = async (e) => {
         e.preventDefault();
 
-        // Add a default device to the form data, linked to the patient and doctor
-        const defaultDevice = {
-            idNos: formData.idNos, // patient ID
-            doctorId: formData.doctorId, // doctor's ID (selected by the secretary)
-            type: 'Blood Pressure Monitor' // Example device type
-        };
-
-        const updatedFormData = {
-            ...formData,
-            medicalDevices: [defaultDevice, ...formData.medicalDevices] // Add default device to the list
-        };
-
         try {
-            // Send the patient data to the backend (and the associated device)
-            await axios.post('http://localhost:5000/api/patients', updatedFormData);
+            await axios.post('http://localhost:5000/api/patients', formData);
             alert('Patient added successfully!');
             setFormData({
                 idNos: '',
                 name: '',
                 dateOfBirth: '',
                 medicalDevices: [], // Reset devices
-                doctorId: '' // Reset selected doctor
+                medicalRecords: [], // Reset records
+                keycloakId: ''
             });
             onClose(); // Close the modal after submit
         } catch (error) {
@@ -118,18 +105,6 @@ const AddPatientForm = ({ onClose }) => {
                 <label>
                     Date of Birth:
                     <input type="date" name="dateOfBirth" value={formData.dateOfBirth} onChange={handleChange} required />
-                </label>
-
-                <label>
-                    Select Doctor:
-                    <select name="doctorId" value={formData.doctorId} onChange={handleChange} required>
-                        <option value="">Select a Doctor</option>
-                        {doctors.map((doctor) => (
-                            <option key={doctor.idNos} value={doctor.idNos}>
-                                {doctor.name} - {doctor.role}
-                            </option>
-                        ))}
-                    </select>
                 </label>
 
                 <h3>Medical Devices</h3>

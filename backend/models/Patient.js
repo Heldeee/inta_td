@@ -5,7 +5,8 @@ const patientSchema = new mongoose.Schema({
     name: String,
     dateOfBirth: Date,
     medicalDevices: [{ id: String, type: String }],
-    medicalRecords: [{ type: mongoose.Schema.Types.ObjectId, ref: 'MedicalRecord' }]
+    medicalRecords: [{ type: mongoose.Schema.Types.ObjectId, ref: 'MedicalRecord' }],
+    keycloakId: { type: String, unique: true, required: true }
 });
 
 const Patient = mongoose.model('Patient', patientSchema);

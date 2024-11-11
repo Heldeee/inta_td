@@ -42,6 +42,7 @@ const PatientsInfo = () => {
                             <h3>Patient Information</h3>
                             <p>Name: {patient.name}</p>
                             <p>Date of Birth: {patient.dateOfBirth}</p>
+                            <p>ID Number: {patient.keycloakId}</p>
                             <h4>Connected Devices</h4>
                             {patient.medicalDevices && patient.medicalDevices.length > 0 ? (
                                 <ul>

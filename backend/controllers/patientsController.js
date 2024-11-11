@@ -36,3 +36,29 @@ export const createPatient = async (req, res) => {
         res.status(500).json({ error: 'Internal server error' });
     }
 };
+
+// Get all patient data by doctor ID
+export const getPatientsByDoctor = async (req, res) => {
+    try {
+        const patients = await Patient.find({ doctorId: req.params.doctorId });
+        res.json(patients);
+    } catch (error) {
+        console.error('Error fetching patients by doctor:', error);
+        res.status(500).json({ error: 'Internal server error' });
+    }
+};
+
+// Get patient data by keycloak ID
+export const getPatientByKeycloakId = async (req, res) => {
+    try {
+        const patient = await Patient.findOne({ keycloakId: req.params.keycloakId });
+        if (!patient) {
+            return res.status(404).json({ error: 'Patient not found' });
+        }
+        res.json(patient);
+    }
+    catch (error) {
+        console.error('Error fetching patient data:', error);
+        res.status(500).json({ error: 'Internal server error' });
+    }
+};
