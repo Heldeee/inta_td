@@ -28,7 +28,7 @@ mongoose.connect(uri, {
 // Routes
 app.use('/api/patients', patientRoutes);
 app.use('/api/devices', deviceRoutes);
-app.use('/api/medical-records', medicalRecordRoutes);
+app.use('/api/medicalRecords', medicalRecordRoutes);
 app.use('/api/professionals', professionalRoutes);
 
 const PORT = process.env.PORT || 5000;

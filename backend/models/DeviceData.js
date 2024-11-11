@@ -1,11 +1,10 @@
 import mongoose from 'mongoose';
 
-const deviceDataSchema = new mongoose.Schema({
-    patientId: { type: String, required: true },
-    deviceId: { type: String, required: true },
-    timestamp: Date,
-    data: Object
+const medicalDeviceSchema = new mongoose.Schema({
+    patient_id: { type: mongoose.Schema.Types.ObjectId, ref: 'Patient', required: true },
+    doctor_id: { type: mongoose.Schema.Types.ObjectId, ref: 'Professional', required: true },
+    installationDate: { type: Date, default: Date.now }
 });
 
-const DeviceData = mongoose.model('DeviceData', deviceDataSchema);
-export default DeviceData;
+const MedicalDevice = mongoose.model('MedicalDevice', medicalDeviceSchema);
+export default MedicalDevice;

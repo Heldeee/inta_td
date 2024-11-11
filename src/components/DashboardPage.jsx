@@ -11,6 +11,7 @@ import PatientInfo from './PatientInfo';
 import MedicalRecordsList from './MedicalRecordsList';
 import AlertsList from './AlertsList';
 import AddPatientForm from './AddPatientForm';
+import AddDeviceForm from './AddDeviceForm';
 import PatientDashboard from './PatientDashboard';
 
 const DashboardPage = () => {
@@ -21,16 +22,13 @@ const DashboardPage = () => {
     const [userRole, setUserRole] = useState(null);
     const [loading, setLoading] = useState(true);
     const [isAddPatientModalOpen, setAddPatientModalOpen] = useState(false);
+    const [isAddDeviceModalOpen, setIsAddDeviceModalOpen] = useState(false);
 
-    // Function to open the modal
-    const openAddPatientModal = () => {
-        setAddPatientModalOpen(true);
-    };
+    const openAddPatientModal = () => setIsAddPatientModalOpen(true);
+    const closeAddPatientModal = () => setIsAddPatientModalOpen(false);
 
-    // Function to close the modal
-    const closeAddPatientModal = () => {
-        setAddPatientModalOpen(false);
-    };
+    const openAddDeviceModal = () => setIsAddDeviceModalOpen(true);
+    const closeAddDeviceModal = () => setIsAddDeviceModalOpen(false);
 
     useEffect(() => {
         // Vérifier l'authentification
@@ -102,8 +100,9 @@ const DashboardPage = () => {
                 }}>
                     <PatientInfo patient={patient} />
                     <button onClick={openAddPatientModal}>Add Patient</button>
-
+                    <button onClick={openAddDeviceModal}>Add Device</button>
                     {isAddPatientModalOpen && <AddPatientForm onClose={closeAddPatientModal} />}
+                    {isAddDeviceModalOpen && <AddDeviceForm onClose={closeAddDeviceModal} />}
                 </div>
 
                 <div style={{

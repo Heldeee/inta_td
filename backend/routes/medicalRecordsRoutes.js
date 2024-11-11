@@ -1,7 +1,11 @@
 import express from 'express';
 const router = express.Router();
-import { getMedicalRecordsByPatientId } from '../controllers/medicalRecordsController.js'
+import { getMedicalRecordsByPatientIdNos, createMedicalRecord } from '../controllers/medicalRecordsController.js';
 
-router.get('/:patientId', getMedicalRecordsByPatientId); // Get medical records for a patient
+// Get medical records for a patient by idNos
+router.get('/:idNos', getMedicalRecordsByPatientIdNos);
+
+// Create a new medical record for a patient
+router.post('/', createMedicalRecord);
 
 export default router;
