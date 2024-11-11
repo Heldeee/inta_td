@@ -35,7 +35,6 @@ export const addMedicalDevice = async (req, res) => {
         const newDevice = new MedicalDevice({
             patient_id: patientIdObj,
             doctor_id: doctorIdObj,
-            type,
             installationDate: installationDate || new Date()
         });
 
