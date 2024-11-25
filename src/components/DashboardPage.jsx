@@ -12,6 +12,7 @@ import MedicalRecordsList from './MedicalRecordsList';
 import AlertsList from './AlertsList';
 import AddPatientForm from './AddPatientForm';
 import AddDeviceForm from './AddDeviceForm';
+import TransferPatientForm from './TransferPatientForm';
 import PatientDashboard from './PatientDashboard';
 
 const DashboardPage = () => {
@@ -23,6 +24,10 @@ const DashboardPage = () => {
     const [loading, setLoading] = useState(true);
     const [isAddPatientModalOpen, setIsAddPatientModalOpen] = useState(false);
     const [isAddDeviceModalOpen, setIsAddDeviceModalOpen] = useState(false);
+    const [isTransferPatientModalOpen, setIsTransferPatientModalOpen] = useState(false);
+
+    const openTransferPatientModal = () => setIsTransferPatientModalOpen(true);
+    const closeTransferPatientModal = () => setIsTransferPatientModalOpen(false);
 
     const openAddPatientModal = () => setIsAddPatientModalOpen(true);
     const closeAddPatientModal = () => setIsAddPatientModalOpen(false);
@@ -101,6 +106,8 @@ const DashboardPage = () => {
                     <PatientInfo patient={patient} />
                     <button onClick={openAddPatientModal}>Add Patient</button>
                     <button onClick={openAddDeviceModal}>Add Device</button>
+                    <button onClick={openTransferPatientModal}>Transfer Patient</button>
+                    {isTransferPatientModalOpen && <TransferPatientForm onClose={closeTransferPatientModal} />}
                     {isAddPatientModalOpen && <AddPatientForm onClose={closeAddPatientModal} />}
                     {isAddDeviceModalOpen && <AddDeviceForm onClose={closeAddDeviceModal} />}
                 </div>
