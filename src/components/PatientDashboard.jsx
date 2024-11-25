@@ -72,7 +72,7 @@ const PatientDashboard = () => {
                     cursor: 'pointer'
                 }}
             >
-                Déconnexion
+                Logout
             </button>
         </div>
 

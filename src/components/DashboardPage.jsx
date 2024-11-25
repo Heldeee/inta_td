@@ -87,7 +87,7 @@ const DashboardPage = () => {
                         cursor: 'pointer'
                     }}
                 >
-                    Déconnexion
+                    Logout
                 </button>
             </div>
 

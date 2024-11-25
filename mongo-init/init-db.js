@@ -2,12 +2,31 @@ db.createCollection('professionals');
 db.createCollection('patients');
 db.createCollection('medicalrecords');
 db.createCollection('medicaldevices');
+db.createCollection('cabinets');
 
 // Création des index
 db.professionals.createIndex({ "idNos": 1 }, { unique: true });
 db.patients.createIndex({ "idNos": 1 }, { unique: true });
 db.medicalrecords.createIndex({ "patientId": 1 });
 db.medicaldevices.createIndex({ "patientId": 1, "timestamp": 1 });
+db.cabinets.createIndex({ "idNos": 1 }, { unique: true });
+
+
+//insert cabinet
+db.cabinets.insertMany([
+    {
+        "idNos": "1",
+        "name": "Cabinet 1 - Paris",
+        "address": "1 rue de Paris, 75001 Paris",
+        "phone": "01 23 45 67 89",
+    },
+    {
+        "idNos": "2",
+        "name": "Cabinet 2 - Lyon",
+        "address": "2 rue de Lyon, 69001 Lyon",
+        "phone": "04 23 45 67 89",
+    },
+]);
 
 // Insertion des nomenclatures NOS
 db.nos_nomenclatures.insertMany([
@@ -28,12 +47,14 @@ db.professionals.insertMany([
         "idNos": "12345",
         "name": "Dr. John Doe",
         "role": "Cardiologist",
+        "cabinet_id": "1",
         "specialization": "Heart Disease"
     },
     {
         "idNos": "12346",
         "name": "Dr. Jane Smith",
         "role": "Cardiologist",
+        "cabinet_id": "2",
         "specialization": "Heart Disease"
     }
 ]);
@@ -43,6 +64,7 @@ db.patients.insertMany([
         "idNos": "26218",
         "name": "Alice Smith",
         "dateOfBirth": "1990-01-01T00:00:00Z",
+        "cabinet_id": "1",
         "keycloakId": "12345",
         "urgentContact": {
             "name": "Bob Smith",
@@ -52,6 +74,7 @@ db.patients.insertMany([
     {
         "idNos": "26219",
         "name": "Bob Smith",
+        "cabinet_id": "2",
         "dateOfBirth": "1990-01-01T00:00:00Z",
         "keycloakId": "12346",
         "urgentContact": {

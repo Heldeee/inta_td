@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import AddPatientForm from './AddPatientForm';
 
 const PatientsInfo = () => {
     const [patients, setPatients] = useState([]);
@@ -7,15 +8,16 @@ const PatientsInfo = () => {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const [searchQuery, setSearchQuery] = useState('');
-    const [devices, setDevices] = useState({}); // State to store devices by patient_id
+    const [devices, setDevices] = useState({});
+    const [showAddPatientForm, setShowAddPatientForm] = useState(false);
+    const [cabinets, setCabinets] = useState({});
 
-    // Fetch patients once when component mounts
     useEffect(() => {
         const fetchPatients = async () => {
             try {
                 const response = await axios.get('http://localhost:5000/api/patients');
                 setPatients(response.data);
-                setFilteredPatients(response.data); // Initially show all patients
+                setFilteredPatients(response.data);
                 setLoading(false);
             } catch (error) {
                 setError('Error fetching patients data');
@@ -24,28 +26,26 @@ const PatientsInfo = () => {
         };
 
         fetchPatients();
-    }, []); // Empty dependency array so it runs only once when the component mounts
+    }, []);
 
-    // Fetch devices once when patients are fetched
     useEffect(() => {
-        const fetchPatientDevices = async () => {
-            const devicesData = {};
+        const getPatientCabinet = async () => {
+            const cabinetData = {};
             for (const patient of patients) {
                 try {
-                    const response = await axios.get(`http://localhost:5000/api/devices/${patient._id}`);
-                    devicesData[patient._id] = response.data;
+                    const response = await axios.get(`http://localhost:5000/api/cabinets/${patient.cabinetId}`);
+                    cabinetData[patient._id] = response.data;
                 } catch (error) {
-                    console.error(`Error fetching devices for patient ${patient._id}:`, error);
-                    devicesData[patient._id] = [];
+                    console.error(`Error fetching cabinet for patient ${patient._id}:`, error);
                 }
             }
-            setDevices(devicesData); // Store devices data for each patient
+            setCabinets(cabinetData);
         };
 
-        if (patients.length > 0) { // Fetch devices only when patients are fetched
-            fetchPatientDevices();
+        if (patients.length > 0) {
+            getPatientCabinet();
         }
-    }, [patients]); // Dependency array contains patients, so it runs when patients data is set
+    }, [patients]);
 
     const handleSearch = (e) => {
         const query = e.target.value.toLowerCase();
@@ -54,6 +54,11 @@ const PatientsInfo = () => {
             patient.name.toLowerCase().includes(query)
         );
         setFilteredPatients(results);
+    };
+
+    const handleAddPatient = (newPatient) => {
+        setPatients((prevPatients) => [...prevPatients, newPatient]);
+        setFilteredPatients((prevPatients) => [...prevPatients, newPatient]);
     };
 
     if (loading) {
@@ -80,6 +85,10 @@ const PatientsInfo = () => {
                     border: '1px solid #ccc'
                 }}
             />
+            <button onClick={() => setShowAddPatientForm(true)}>Add Patient</button>
+            {showAddPatientForm && (
+                <AddPatientForm onClose={() => setShowAddPatientForm(false)} onAddPatient={handleAddPatient} />
+            )}
             {filteredPatients.length === 0 ? (
                 <p>No patients found.</p>
             ) : (
@@ -101,6 +110,14 @@ const PatientsInfo = () => {
                                 <p>Name: {patient.name}</p>
                                 <p>Date of Birth: {patient.dateOfBirth}</p>
                                 <p>ID Number: {patient.keycloakId}</p>
+                                {cabinets[patient._id] && (
+                                    <>
+                                        <h4>Cabinet Information</h4>
+                                        <p>Name: {cabinets[patient._id].name}</p>
+                                        <p>Address: {cabinets[patient._id].address}</p>
+                                        <p>Phone: {cabinets[patient._id].phone}</p>
+                                    </>
+                                )}
                                 <h4>Connected Devices</h4>
                                 {devices[patient._id] && devices[patient._id].length > 0 ? (
                                     <ul>
