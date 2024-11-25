@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import AddPatientForm from './AddPatientForm';
 
 const PatientsInfo = () => {
@@ -12,7 +12,7 @@ const PatientsInfo = () => {
     const [devices, setDevices] = useState({});
     const [showAddPatientForm, setShowAddPatientForm] = useState(false);
     const [cabinets, setCabinets] = useState({});
-    const history = useHistory();
+    const navigate = useNavigate();
 
     useEffect(() => {
         const fetchPatients = async () => {
@@ -132,7 +132,7 @@ const PatientsInfo = () => {
                                 ) : (
                                     <p>No devices connected.</p>
                                 )}
-                                <button onClick={() => history.push(`/patient/${patient._id}`)}>View Details</button>
+                                <button onClick={() => navigate(`/patient/${patient._id}`)}>View Details</button>
                             </li>
                         ))}
                     </ul>

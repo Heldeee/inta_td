@@ -49,74 +49,146 @@ const TransferPatientForm = ({ onClose }) => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-
-        if (!formData.patientId || !formData.doctorId) {
-            alert('Both Patient and Doctor must be selected.');
-            return;
-        }
-
         try {
-            console.log('Transferring patient:', formData);
-            // Placeholder for FHIR format and backend call
-            alert('Patient transfer recorded successfully!');
-            setFormData({ patientId: '', doctorId: '' });
+            await axios.post('http://localhost:5000/api/transfer', formData);
+            alert('Patient transferred successfully');
             onClose();
         } catch (error) {
             console.error('Error transferring patient:', error);
-            alert('Error transferring patient.');
+            alert('Error transferring patient');
         }
     };
 
     return (
-        <div style={{ background: '#fff', padding: '20px', borderRadius: '8px' }}>
-            <h2>Transfer Patient</h2>
-            <form onSubmit={handleSubmit}>
-                <label>
-                    Select Patient:
+        <div style={{
+            background: '#f9f9f9',
+            padding: '30px',
+            borderRadius: '10px',
+            boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)',
+            maxWidth: '500px',
+            margin: '0 auto'
+        }}>
+            <h2 style={{
+                marginBottom: '20px',
+                color: '#333',
+                textAlign: 'center'
+            }}>Transfer Patient</h2>
+            <form onSubmit={handleSubmit} style={{
+                display: 'flex',
+                flexDirection: 'column',
+                gap: '20px'
+            }}>
+                <label style={{
+                    display: 'flex',
+                    flexDirection: 'column',
+                    gap: '8px'
+                }}>
+                    Patient:
                     <input
                         type="text"
                         name="patientId"
                         value={formData.patientId}
                         onChange={handleChange}
-                        placeholder="Search or select patient"
+                        required
+                        placeholder="Search patient by name"
+                        style={{
+                            padding: '10px',
+                            borderRadius: '5px',
+                            border: '1px solid #ccc'
+                        }}
                     />
                     <select
-                        onChange={(e) => setFormData({ ...formData, patientId: e.target.value })}
+                        name="patientId"
                         value={formData.patientId}
+                        onChange={handleChange}
+                        required
+                        style={{
+                            padding: '10px',
+                            borderRadius: '5px',
+                            border: '1px solid #ccc'
+                        }}
                     >
-                        <option value="">Select Patient</option>
-                        {filteredPatients.map(patient => (
+                        <option value="">Select a patient</option>
+                        {filteredPatients.map((patient) => (
                             <option key={patient._id} value={patient._id}>
-                                {patient.name} - {patient.idNos}
+                                {patient.name}
                             </option>
                         ))}
                     </select>
                 </label>
 
-                <label>
-                    Select Doctor:
+                <label style={{
+                    display: 'flex',
+                    flexDirection: 'column',
+                    gap: '8px'
+                }}>
+                    Doctor:
                     <input
                         type="text"
                         name="doctorId"
                         value={formData.doctorId}
                         onChange={handleChange}
-                        placeholder="Search or select doctor"
+                        required
+                        placeholder="Search doctor by name"
+                        style={{
+                            padding: '10px',
+                            borderRadius: '5px',
+                            border: '1px solid #ccc'
+                        }}
                     />
                     <select
-                        onChange={(e) => setFormData({ ...formData, doctorId: e.target.value })}
+                        name="doctorId"
                         value={formData.doctorId}
+                        onChange={handleChange}
+                        required
+                        style={{
+                            padding: '10px',
+                            borderRadius: '5px',
+                            border: '1px solid #ccc'
+                        }}
                     >
-                        <option value="">Select Doctor</option>
-                        {filteredDoctors.map(doctor => (
+                        <option value="">Select a doctor</option>
+                        {filteredDoctors.map((doctor) => (
                             <option key={doctor._id} value={doctor._id}>
-                                {doctor.name} - {doctor.specialization}
+                                {doctor.name}
                             </option>
                         ))}
                     </select>
                 </label>
 
-                <button type="submit">Submit</button>
-                <button type="button" onClick={onClose}>Cancel</button>
+                <div style={{
+                    display: 'flex',
+                    justifyContent: 'space-between',
+                    marginTop: '20px'
+                }}>
+                    <button
+                        type="submit"
+                        style={{
+                            padding: '10px 20px',
+                            borderRadius: '5px',
+                            border: 'none',
+                            background: '#007BFF',
+                            color: '#fff',
+                            cursor: 'pointer'
+                        }}
+                    >
+                        Transfer
+                    </button>
+                    <button
+                        type="button"
+                        onClick={onClose}
+                        style={{
+                            padding: '10px 20px',
+                            borderRadius: '5px',
+                            border: 'none',
+                            background: '#6c757d',
+                            color: '#fff',
+                            cursor: 'pointer'
+                        }}
+                    >
+                        Cancel
+                    </button>
+                </div>
             </form>
         </div>
     );
