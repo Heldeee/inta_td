@@ -1,4 +1,6 @@
 import Professional from '../models/Professional.js';
+import Patient from '../models/Patient.js';
+import axios from 'axios';
 
 // Get professional information by ID
 export const getProfessionalInfo = async (req, res) => {

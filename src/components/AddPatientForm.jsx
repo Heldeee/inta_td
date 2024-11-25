@@ -105,9 +105,12 @@ const AddPatientForm = ({ onClose, onAddPatient }) => {
             margin: '0 auto'
         }}>
             <h2 style={{
-                marginBottom: '20px',
-                color: '#333',
-                textAlign: 'center'
+                padding: '10px 20px',
+                borderRadius: '5px',
+                border: 'none',
+                background: '#007BFF',
+                color: '#fff',
+                cursor: 'pointer'
             }}>Add Patient</h2>
             <form onSubmit={handleSubmit} style={{
                 display: 'flex',
@@ -204,7 +207,7 @@ const AddPatientForm = ({ onClose, onAddPatient }) => {
                             padding: '10px 20px',
                             borderRadius: '5px',
                             border: 'none',
-                            background: '#6c757d',
+                            background: '#dc3545',
                             color: '#fff',
                             cursor: 'pointer'
                         }}
@@ -212,8 +215,8 @@ const AddPatientForm = ({ onClose, onAddPatient }) => {
                         Cancel
                     </button>
                 </div>
-            </form>
-        </div>
+            </form >
+        </div >
     );
 };
 

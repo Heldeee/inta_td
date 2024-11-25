@@ -62,3 +62,34 @@ export const getPatientByKeycloakId = async (req, res) => {
         res.status(500).json({ error: 'Internal server error' });
     }
 };
+
+// Send patient data to FHIR server
+export const sendPatientToFhir = async (req, res) => {
+    try {
+        const patient = await Patient.findOne({ idNos: req.params.id });
+        if (!patient) {
+            return res.status(404).json({ error: 'Patient not found' });
+        }
+
+        const fhirServerUrl = "https://hapi.fhir.org/baseR4/";
+        const patientInfo = {
+            id: patient.idNos,
+            name: [{ use: "official", family: patient.name.split(' ')[1], given: [patient.name.split(' ')[0]] }],
+            gender: patient.gender,
+            birthDate: patient.dateOfBirth.toISOString().split('T')[0]
+        };
+
+        const response = await axios.post(fhirServerUrl + "Patient", patientInfo, {
+            headers: { 'Content-Type': 'application/fhir+json' }
+        });
+
+        if (response.status === 201) {
+            res.json({ message: 'Patient data sent to FHIR server successfully', resourceId: response.headers.location });
+        } else {
+            res.status(response.status).json({ error: 'Error sending data to FHIR server', details: response.data });
+        }
+    } catch (error) {
+        console.error('Error sending patient data to FHIR server:', error);
+        res.status(500).json({ error: 'Internal server error' });
+    }
+};

@@ -24,7 +24,6 @@ const DashboardPage = () => {
     const [isAddPatientModalOpen, setIsAddPatientModalOpen] = useState(false);
     const [isAddDeviceModalOpen, setIsAddDeviceModalOpen] = useState(false);
 
-    const openAddPatientModal = () => setIsAddPatientModalOpen(true);
     const closeAddPatientModal = () => setIsAddPatientModalOpen(false);
 
     const openAddDeviceModal = () => setIsAddDeviceModalOpen(true);
@@ -99,7 +98,6 @@ const DashboardPage = () => {
                     boxShadow: '0 2px 4px rgba(0,0,0,0.1)'
                 }}>
                     <PatientInfo patient={patient} />
-                    <button onClick={openAddPatientModal}>Add Patient</button>
                     <button onClick={openAddDeviceModal}>Add Device</button>
                     {isAddPatientModalOpen && <AddPatientForm onClose={closeAddPatientModal} />}
                     {isAddDeviceModalOpen && <AddDeviceForm onClose={closeAddDeviceModal} />}

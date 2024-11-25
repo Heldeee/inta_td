@@ -47,14 +47,14 @@ db.professionals.insertMany([
         "idNos": "12345",
         "name": "Dr. John Doe",
         "role": "Cardiologist",
-        "cabinet_id": "1",
+        "cabinetId": "1",
         "specialization": "Heart Disease"
     },
     {
         "idNos": "12346",
         "name": "Dr. Jane Smith",
         "role": "Cardiologist",
-        "cabinet_id": "2",
+        "cabinetId": "2",
         "specialization": "Heart Disease"
     }
 ]);
