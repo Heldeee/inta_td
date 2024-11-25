@@ -1,18 +1,16 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
-const AddDeviceForm = ({ onClose }) => {
+const TransferPatientForm = ({ onClose }) => {
     const [formData, setFormData] = useState({
         patientId: '',
-        doctorId: '',
-        installationDate: ''
+        doctorId: ''
     });
     const [patients, setPatients] = useState([]);
     const [doctors, setDoctors] = useState([]);
     const [filteredPatients, setFilteredPatients] = useState([]);
     const [filteredDoctors, setFilteredDoctors] = useState([]);
 
-    // Fetch patients and doctors on component mount
     useEffect(() => {
         const fetchData = async () => {
             try {
@@ -20,8 +18,8 @@ const AddDeviceForm = ({ onClose }) => {
                 const doctorsResponse = await axios.get('http://localhost:5000/api/professionals');
                 setPatients(patientsResponse.data);
                 setDoctors(doctorsResponse.data);
-                setFilteredPatients(patientsResponse.data); // Initially, show all patients
-                setFilteredDoctors(doctorsResponse.data); // Initially, show all doctors
+                setFilteredPatients(patientsResponse.data);
+                setFilteredDoctors(doctorsResponse.data);
             } catch (error) {
                 console.error('Error fetching data:', error);
             }
@@ -29,7 +27,6 @@ const AddDeviceForm = ({ onClose }) => {
         fetchData();
     }, []);
 
-    // Handle form input changes
     const handleChange = (e) => {
         const { name, value } = e.target;
         setFormData((prevState) => ({
@@ -37,7 +34,6 @@ const AddDeviceForm = ({ onClose }) => {
             [name]: value
         }));
 
-        // Filter patients or doctors based on input
         if (name === 'patientId') {
             const searchValue = value.toLowerCase();
             setFilteredPatients(patients.filter(patient =>
@@ -54,53 +50,35 @@ const AddDeviceForm = ({ onClose }) => {
     const handleSubmit = async (e) => {
         e.preventDefault();
 
-        // Ensure formData is correct
-        console.log(formData);
-
-        // Validate that all required fields are present
         if (!formData.patientId || !formData.doctorId) {
-            alert('Patient ID and Doctor ID are required');
+            alert('Both Patient and Doctor must be selected.');
             return;
         }
 
-        // Set the device type automatically here, for example:
-        const updatedFormData = {
-            ...formData,
-            type: 'Blood Pressure' // Default or auto-determined device type
-        };
-
         try {
-            console.log('Adding device:', updatedFormData);
-            // Send the data to the backend
-            const response = await axios.post('http://localhost:5000/api/devices', updatedFormData);
-            alert('Device added successfully!');
-
-            // Reset the form
-            setFormData({
-                patientId: '',
-                doctorId: '',
-                installationDate: ''
-            });
+            console.log('Transferring patient:', formData);
+            // Placeholder for FHIR format and backend call
+            alert('Patient transfer recorded successfully!');
+            setFormData({ patientId: '', doctorId: '' });
             onClose();
         } catch (error) {
-            console.error('Error adding device:', error);
-            alert('Error adding device');
+            console.error('Error transferring patient:', error);
+            alert('Error transferring patient.');
         }
     };
 
     return (
         <div style={{ background: '#fff', padding: '20px', borderRadius: '8px' }}>
-            <h2>Add Device</h2>
+            <h2>Transfer Patient</h2>
             <form onSubmit={handleSubmit}>
                 <label>
-                    Patient ID:
+                    Select Patient:
                     <input
                         type="text"
                         name="patientId"
                         value={formData.patientId}
                         onChange={handleChange}
-                        placeholder="Search or enter patient ID"
-                        required
+                        placeholder="Search or select patient"
                     />
                     <select
                         onChange={(e) => setFormData({ ...formData, patientId: e.target.value })}
@@ -116,14 +94,13 @@ const AddDeviceForm = ({ onClose }) => {
                 </label>
 
                 <label>
-                    Doctor ID:
+                    Select Doctor:
                     <input
                         type="text"
                         name="doctorId"
                         value={formData.doctorId}
                         onChange={handleChange}
-                        placeholder="Search or enter doctor ID"
-                        required
+                        placeholder="Search or select doctor"
                     />
                     <select
                         onChange={(e) => setFormData({ ...formData, doctorId: e.target.value })}
@@ -132,21 +109,10 @@ const AddDeviceForm = ({ onClose }) => {
                         <option value="">Select Doctor</option>
                         {filteredDoctors.map(doctor => (
                             <option key={doctor._id} value={doctor._id}>
-                                {doctor.name}
+                                {doctor.name} - {doctor.specialization}
                             </option>
                         ))}
                     </select>
-                </label>
-
-                <label>
-                    Installation Date:
-                    <input
-                        type="date"
-                        name="installationDate"
-                        value={formData.installationDate}
-                        onChange={handleChange}
-                        required
-                    />
                 </label>
 
                 <button type="submit">Submit</button>
@@ -156,4 +122,4 @@ const AddDeviceForm = ({ onClose }) => {
     );
 };
 
-export default AddDeviceForm;
+export default TransferPatientForm;

@@ -7,7 +7,8 @@ const AddPatientForm = ({ onClose, onAddPatient }) => {
         name: '',
         dateOfBirth: '',
         keycloakId: '',
-        cabinetId: ''
+        cabinetId: '',
+        gender: '' // Added gender field
     });
     const [cabinets, setCabinets] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -78,7 +79,8 @@ const AddPatientForm = ({ onClose, onAddPatient }) => {
                 name: '',
                 dateOfBirth: '',
                 keycloakId: '',
-                cabinetId: ''
+                cabinetId: '',
+                gender: ''
             });
             onClose();
         } catch (error) {
@@ -156,6 +158,31 @@ const AddPatientForm = ({ onClose, onAddPatient }) => {
                         }}
                     />
                 </label>
+
+                <label style={{
+                    display: 'flex',
+                    flexDirection: 'column',
+                    gap: '8px'
+                }}>
+                    Gender:
+                    <select
+                        name="gender"
+                        value={formData.gender}
+                        onChange={handleChange}
+                        required
+                        style={{
+                            padding: '10px',
+                            borderRadius: '5px',
+                            border: '1px solid #ccc'
+                        }}
+                    >
+                        <option value="">Select Gender</option>
+                        <option value="Male">Male</option>
+                        <option value="Female">Female</option>
+                        <option value="Other">Other</option>
+                    </select>
+                </label>
+
                 <label style={{
                     display: 'flex',
                     flexDirection: 'column',
