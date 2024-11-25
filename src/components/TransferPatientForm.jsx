@@ -181,7 +181,7 @@ const TransferPatientForm = ({ onClose }) => {
                             padding: '10px 20px',
                             borderRadius: '5px',
                             border: 'none',
-                            background: '#6c757d',
+                            background: '#dc3545',
                             color: '#fff',
                             cursor: 'pointer'
                         }}
