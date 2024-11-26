@@ -50,7 +50,7 @@ const TransferPatientForm = ({ onClose }) => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            await axios.post('http://localhost:5000/api/transfer', formData);
+            await axios.post('http://localhost:5000/api/patients/transfer', formData);
             alert('Patient transferred successfully');
             onClose();
         } catch (error) {

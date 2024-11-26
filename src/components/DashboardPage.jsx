@@ -117,19 +117,18 @@ const DashboardPage = () => {
                     boxShadow: '0 2px 4px rgba(0,0,0,0.1)'
                 }}>
                     <MedicalRecordsList records={medicalRecords} />
+                    {userRole === 'doctor' && (
+                        <div style={{
+                            gridColumn: '1 / -1',
+                            padding: '20px',
+                            backgroundColor: 'white',
+                            borderRadius: '8px',
+                            boxShadow: '0 2px 4px rgba(0,0,0,0.1)'
+                        }}>
+                            <AlertsList alerts={alerts} />
+                        </div>
+                    )}
                 </div>
-
-                {userRole === 'doctor' && (
-                    <div style={{
-                        gridColumn: '1 / -1',
-                        padding: '20px',
-                        backgroundColor: 'white',
-                        borderRadius: '8px',
-                        boxShadow: '0 2px 4px rgba(0,0,0,0.1)'
-                    }}>
-                        <AlertsList alerts={alerts} />
-                    </div>
-                )}
             </div>
         </div>
     );

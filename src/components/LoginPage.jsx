@@ -35,7 +35,7 @@ const LoginPage = () => {
                 boxShadow: '0 2px 4px rgba(0,0,0,0.1)'
             }}>
                 <h1 style={{ marginBottom: '1.5rem', color: '#333' }}>
-                    Cabinet Médical Login
+                    Medical Cabinet Login
                 </h1>
                 <button
                     onClick={handleLogin}

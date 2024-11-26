@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
 import AddPatientForm from './AddPatientForm';
+import PatientDetail from './PatientDetail';
 
 const PatientsInfo = () => {
     const [patients, setPatients] = useState([]);
@@ -9,10 +9,14 @@ const PatientsInfo = () => {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const [searchQuery, setSearchQuery] = useState('');
-    const [devices, setDevices] = useState({});
+    const [selectedPatient, setSelectedPatient] = useState(null);
     const [showAddPatientForm, setShowAddPatientForm] = useState(false);
     const [cabinets, setCabinets] = useState({});
-    const navigate = useNavigate();
+
+    const prettyDate = (date) => {
+        const d = new Date(date);
+        return `${d.getDate()}/${d.getMonth() + 1}/${d.getFullYear()}`;
+    };
 
     useEffect(() => {
         const fetchPatients = async () => {
@@ -106,37 +110,22 @@ const PatientsInfo = () => {
                             <li key={patient._id} style={{
                                 borderBottom: '1px solid #eee',
                                 paddingBottom: '10px',
-                                marginBottom: '10px'
-                            }}>
-                                <h3>Patient Information</h3>
-                                <p>Name: {patient.name}</p>
-                                <p>Date of Birth: {patient.dateOfBirth}</p>
-                                <p>ID Number: {patient.keycloakId}</p>
+                                marginBottom: '10px',
+                                cursor: 'pointer',
+                                backgroundColor: selectedPatient && selectedPatient._id === patient._id ? '#f0f0f0' : 'transparent'
+                            }} onClick={() => setSelectedPatient(patient)}>
+                                <h3>{patient.name}</h3>
+                                <p>Date of Birth: {prettyDate(patient.dateOfBirth)}</p>
                                 {cabinets[patient._id] && (
-                                    <>
-                                        <h4>Cabinet Information</h4>
-                                        <p>Name: {cabinets[patient._id].name}</p>
-                                        <p>Address: {cabinets[patient._id].address}</p>
-                                        <p>Phone: {cabinets[patient._id].phone}</p>
-                                    </>
+                                    <p>Cabinet: {cabinets[patient._id].name}</p>
                                 )}
-                                <h4>Connected Devices</h4>
-                                {devices[patient._id] && devices[patient._id].length > 0 ? (
-                                    <ul>
-                                        {devices[patient._id].map((device) => (
-                                            <li key={device._id}>
-                                                Medical Device - Device ID: {device._id}
-                                            </li>
-                                        ))}
-                                    </ul>
-                                ) : (
-                                    <p>No devices connected.</p>
-                                )}
-                                <button onClick={() => navigate(`/patient/${patient._id}`)}>View Details</button>
                             </li>
                         ))}
                     </ul>
                 </div>
+            )}
+            {selectedPatient && (
+                <PatientDetail patient={selectedPatient} />
             )}
         </div>
     );

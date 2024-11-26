@@ -11,7 +11,6 @@ import cabinetsRoutes from './routes/cabinetsRoutes.js';
 dotenv.config();
 
 const app = express();
-
 const uri = `mongodb://mongodb:27017/medical_cabinet`
 
 console.log(uri);

@@ -63,8 +63,9 @@ db.patients.insertMany([
     {
         "idNos": "26218",
         "name": "Alice Smith",
+        "gender": "female",
         "dateOfBirth": "1990-01-01T00:00:00Z",
-        "cabinet_id": "1",
+        "cabinetId": "1",
         "keycloakId": "12345",
         "urgentContact": {
             "name": "Bob Smith",
@@ -74,7 +75,8 @@ db.patients.insertMany([
     {
         "idNos": "26219",
         "name": "Bob Smith",
-        "cabinet_id": "2",
+        "gender": "male",
+        "cabinetId": "2",
         "dateOfBirth": "1990-01-01T00:00:00Z",
         "keycloakId": "12346",
         "urgentContact": {
