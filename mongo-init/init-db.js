@@ -70,7 +70,23 @@ db.patients.insertMany([
         "urgentContact": {
             "name": "Bob Smith",
             "phoneNumber": "123-456-7890"
-        }
+        },
+        "telecom": [
+            {
+                "system": "phone",
+                "value": "123-456-7890",
+                "use": "mobile"
+            },
+            {
+                "system": "email",
+                "value": "alice.smith@example.com",
+                "use": "home"
+            }
+        ],
+        "maritalStatus": "single",
+        "photo": "https://example.com/photos/alice.jpg",
+        "active": true,
+        "deceased": false
     },
     {
         "idNos": "26219",
@@ -82,7 +98,23 @@ db.patients.insertMany([
         "urgentContact": {
             "name": "Alice Smith",
             "phoneNumber": "123-456-7890"
-        }
+        },
+        "telecom": [
+            {
+                "system": "phone",
+                "value": "123-456-7890",
+                "use": "mobile"
+            },
+            {
+                "system": "email",
+                "value": "bob.smith@example.com",
+                "use": "home"
+            }
+        ],
+        "maritalStatus": "married",
+        "photo": "https://example.com/photos/bob.jpg",
+        "active": true,
+        "deceased": false
     }
 ]);
 

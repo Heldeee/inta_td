@@ -14,6 +14,7 @@ import AddPatientForm from './AddPatientForm';
 import AddDeviceForm from './AddDeviceForm';
 import TransferPatientForm from './TransferPatientForm';
 import PatientDashboard from './PatientDashboard';
+import PatientDetail from './PatientDetail';
 
 const DashboardPage = () => {
     const navigate = useNavigate();
@@ -25,6 +26,7 @@ const DashboardPage = () => {
     const [isAddPatientModalOpen, setIsAddPatientModalOpen] = useState(false);
     const [isAddDeviceModalOpen, setIsAddDeviceModalOpen] = useState(false);
     const [isTransferPatientModalOpen, setIsTransferPatientModalOpen] = useState(false);
+    const [selectedPatient, setSelectedPatient] = useState(null);
 
     const openTransferPatientModal = () => setIsTransferPatientModalOpen(true);
     const closeTransferPatientModal = () => setIsTransferPatientModalOpen(false);
@@ -35,7 +37,6 @@ const DashboardPage = () => {
     const closeAddDeviceModal = () => setIsAddDeviceModalOpen(false);
 
     useEffect(() => {
-        // Vérifier l'authentification
         if (!isAuthenticated()) {
             navigate('/login');
             return;
@@ -72,7 +73,7 @@ const DashboardPage = () => {
     }
 
     return (
-        <div style={{ padding: '20px' }}>
+        <div style={{ padding: '20px', fontFamily: 'Arial, sans-serif' }}>
             <div style={{
                 display: 'flex',
                 justifyContent: 'space-between',
@@ -95,40 +96,58 @@ const DashboardPage = () => {
                 </button>
             </div>
 
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px' }}>
+            <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr', gap: '20px' }}>
                 <div style={{
                     padding: '20px',
                     backgroundColor: 'white',
                     borderRadius: '8px',
-                    boxShadow: '0 2px 4px rgba(0,0,0,0.1)'
+                    boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    gap: '20px'
                 }}>
-                    <PatientInfo patient={patient} />
-                    <button onClick={openAddDeviceModal}>Add Device</button>
-                    <button onClick={openTransferPatientModal}>Transfer Patient</button>
-                    {isTransferPatientModalOpen && <TransferPatientForm onClose={closeTransferPatientModal} />}
+                    <PatientInfo onSelectPatient={setSelectedPatient} />
+                    <button
+                        onClick={() => setIsAddPatientModalOpen(true)}
+                        style={{
+                            padding: '10px',
+                            backgroundColor: '#007BFF',
+                            color: 'white',
+                            border: 'none',
+                            borderRadius: '4px',
+                            cursor: 'pointer',
+                            alignSelf: 'flex-end'
+                        }}
+                    >
+                        Add Patient
+                    </button>
                     {isAddPatientModalOpen && <AddPatientForm onClose={closeAddPatientModal} />}
-                    {isAddDeviceModalOpen && <AddDeviceForm onClose={closeAddDeviceModal} />}
                 </div>
 
                 <div style={{
                     padding: '20px',
                     backgroundColor: 'white',
                     borderRadius: '8px',
-                    boxShadow: '0 2px 4px rgba(0,0,0,0.1)'
+                    boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    gap: '20px'
                 }}>
                     <MedicalRecordsList records={medicalRecords} />
                     {userRole === 'doctor' && (
-                        <div style={{
-                            gridColumn: '1 / -1',
-                            padding: '20px',
-                            backgroundColor: 'white',
-                            borderRadius: '8px',
-                            boxShadow: '0 2px 4px rgba(0,0,0,0.1)'
-                        }}>
-                            <AlertsList alerts={alerts} />
-                        </div>
+                        <AlertsList alerts={alerts} />
                     )}
                 </div>
+                {selectedPatient && (
+                    <div style={{
+                        backgroundColor: 'white',
+                        padding: '20px',
+                        borderRadius: '8px',
+                        boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
+                    }}>
+                        <PatientDetail patient={selectedPatient} />
+                    </div>
+                )}
             </div>
         </div>
     );

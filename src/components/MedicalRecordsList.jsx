@@ -80,7 +80,7 @@ const MedicalRecordsList = () => {
     };
 
     return (
-        <div>
+        <div style={{ marginBottom: '100px' }}>
             <h2>Medical Records</h2>
 
             {/* Search and select a patient */}

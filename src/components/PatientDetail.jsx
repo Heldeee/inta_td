@@ -45,7 +45,7 @@ const PatientDetail = ({ patient }) => {
     }
 
     return (
-        <div style={{ padding: '20px' }}>
+        <div style={{ padding: '20px', backgroundColor: 'white', borderRadius: '8px', boxShadow: '0 2px 4px rgba(0,0,0,0.1)' }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                 <h2>Patient Details</h2>
                 <button onClick={sendPatientToFhir} style={{
@@ -63,6 +63,8 @@ const PatientDetail = ({ patient }) => {
             <p>Date of Birth: {prettyDate(patient.dateOfBirth)}</p>
             <p>Gender: {patient.gender}</p>
             <p>ID Number: {patient.keycloakId}</p>
+            <p>Marital Status: {patient.maritalStatus}</p>
+            {patient.photo && <img src={patient.photo} alt={`${patient.name}'s photo`} style={{ width: '100px', height: '100px' }} />}
             {cabinet && (
                 <>
                     <h4>Cabinet Information</h4>
@@ -70,6 +72,20 @@ const PatientDetail = ({ patient }) => {
                     <p>Address: {cabinet.address}</p>
                     <p>Phone: {cabinet.phone}</p>
                 </>
+            )}
+            {patient.urgentContact && (
+                <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                    <p>Urgent Contact: {patient.urgentContact.name}</p>
+                    <p>Phone: {patient.urgentContact.phoneNumber}</p>
+                </div>
+            )}
+            {patient.telecom && (
+                <div>
+                    <h4>Contact Information</h4>
+                    {patient.telecom.map((contact, index) => (
+                        <p key={index}>{contact.system}: {contact.value} ({contact.use})</p>
+                    ))}
+                </div>
             )}
         </div>
     );

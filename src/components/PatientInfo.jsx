@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import AddPatientForm from './AddPatientForm';
-import PatientDetail from './PatientDetail';
 
-const PatientsInfo = () => {
+const PatientsInfo = ({ onSelectPatient }) => {
     const [patients, setPatients] = useState([]);
     const [filteredPatients, setFilteredPatients] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -113,7 +112,7 @@ const PatientsInfo = () => {
                                 marginBottom: '10px',
                                 cursor: 'pointer',
                                 backgroundColor: selectedPatient && selectedPatient._id === patient._id ? '#f0f0f0' : 'transparent'
-                            }} onClick={() => setSelectedPatient(patient)}>
+                            }} onClick={() => onSelectPatient(patient)}>
                                 <h3>{patient.name}</h3>
                                 <p>Date of Birth: {prettyDate(patient.dateOfBirth)}</p>
                                 {cabinets[patient._id] && (
@@ -123,9 +122,6 @@ const PatientsInfo = () => {
                         ))}
                     </ul>
                 </div>
-            )}
-            {selectedPatient && (
-                <PatientDetail patient={selectedPatient} />
             )}
         </div>
     );
