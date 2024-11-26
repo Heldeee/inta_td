@@ -3,8 +3,8 @@ import axios from 'axios';
 
 const TransferPatientForm = ({ onClose }) => {
     const [formData, setFormData] = useState({
-        patientId: '',
-        doctorId: ''
+        patient: '',
+        doctor: ''
     });
     const [patients, setPatients] = useState([]);
     const [doctors, setDoctors] = useState([]);
@@ -34,12 +34,12 @@ const TransferPatientForm = ({ onClose }) => {
             [name]: value
         }));
 
-        if (name === 'patientId') {
+        if (name === 'patient') {
             const searchValue = value.toLowerCase();
             setFilteredPatients(patients.filter(patient =>
                 patient.name.toLowerCase().includes(searchValue)
             ));
-        } else if (name === 'doctorId') {
+        } else if (name === 'doctor') {
             const searchValue = value.toLowerCase();
             setFilteredDoctors(doctors.filter(doctor =>
                 doctor.name.toLowerCase().includes(searchValue)
@@ -49,13 +49,38 @@ const TransferPatientForm = ({ onClose }) => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+
+        const selectedPatient = patients.find(patient => patient.name === formData.patient);
+        const selectedDoctor = doctors.find(doctor => doctor.name === formData.doctor);
+
+        if (!selectedPatient || !selectedDoctor) {
+            alert('Invalid selection for patient or doctor.');
+            return;
+        }
+
         try {
-            await axios.post('http://localhost:5000/api/patients/transfer', formData);
-            alert('Patient transferred successfully');
+            // Fetch detailed information for patient and doctor using `idNos`
+            const patientDetails = await axios.get(`http://localhost:5000/api/patients/${selectedPatient.idNos}`);
+            const doctorDetails = await axios.get(`http://localhost:5000/api/professionals/${selectedDoctor.idNos}`);
+
+            const dataToDownload = {
+                patient: patientDetails.data,
+                doctor: doctorDetails.data
+            };
+
+            // Create and trigger JSON file download
+            const blob = new Blob([JSON.stringify(dataToDownload, null, 2)], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = 'transfer_patient.json';
+            link.click();
+            URL.revokeObjectURL(url);
+
             onClose();
         } catch (error) {
-            console.error('Error transferring patient:', error);
-            alert('Error transferring patient');
+            console.error('Error fetching detailed data:', error);
+            alert('Error fetching detailed data');
         }
     };
 
@@ -86,8 +111,8 @@ const TransferPatientForm = ({ onClose }) => {
                     Patient:
                     <input
                         type="text"
-                        name="patientId"
-                        value={formData.patientId}
+                        name="patient"
+                        value={formData.patient}
                         onChange={handleChange}
                         required
                         placeholder="Search patient by name"
@@ -98,8 +123,8 @@ const TransferPatientForm = ({ onClose }) => {
                         }}
                     />
                     <select
-                        name="patientId"
-                        value={formData.patientId}
+                        name="patient"
+                        value={formData.patient}
                         onChange={handleChange}
                         required
                         style={{
@@ -110,7 +135,7 @@ const TransferPatientForm = ({ onClose }) => {
                     >
                         <option value="">Select a patient</option>
                         {filteredPatients.map((patient) => (
-                            <option key={patient._id} value={patient._id}>
+                            <option key={patient.idNos} value={patient.name}>
                                 {patient.name}
                             </option>
                         ))}
@@ -125,8 +150,8 @@ const TransferPatientForm = ({ onClose }) => {
                     Doctor:
                     <input
                         type="text"
-                        name="doctorId"
-                        value={formData.doctorId}
+                        name="doctor"
+                        value={formData.doctor}
                         onChange={handleChange}
                         required
                         placeholder="Search doctor by name"
@@ -137,8 +162,8 @@ const TransferPatientForm = ({ onClose }) => {
                         }}
                     />
                     <select
-                        name="doctorId"
-                        value={formData.doctorId}
+                        name="doctor"
+                        value={formData.doctor}
                         onChange={handleChange}
                         required
                         style={{
@@ -149,7 +174,7 @@ const TransferPatientForm = ({ onClose }) => {
                     >
                         <option value="">Select a doctor</option>
                         {filteredDoctors.map((doctor) => (
-                            <option key={doctor._id} value={doctor._id}>
+                            <option key={doctor.idNos} value={doctor.name}>
                                 {doctor.name}
                             </option>
                         ))}
@@ -172,7 +197,7 @@ const TransferPatientForm = ({ onClose }) => {
                             cursor: 'pointer'
                         }}
                     >
-                        Transfer
+                        Download JSON
                     </button>
                     <button
                         type="button"
