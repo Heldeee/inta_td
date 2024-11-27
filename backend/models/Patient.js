@@ -1,12 +1,11 @@
 import mongoose from 'mongoose';
 
 const patientSchema = new mongoose.Schema({
-    idNos: { type: String, unique: true, required: true },
     name: String,
     active: Boolean,
     dateOfBirth: Date,
     gender: String,
-    cabinetId: { type: String, required: true },
+    cabinetId: { type: mongoose.Schema.Types.ObjectId, ref: 'Cabinet', required: true },
     keycloakId: { type: String, unique: true, required: true },
     urgentContact: {
         name: String,

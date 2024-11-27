@@ -109,7 +109,7 @@ const AddDeviceForm = ({ onClose }) => {
                         <option value="">Select Patient</option>
                         {filteredPatients.map(patient => (
                             <option key={patient._id} value={patient._id}>
-                                {patient.name} - {patient.idNos}
+                                {patient.name} - {patient._id}
                             </option>
                         ))}
                     </select>

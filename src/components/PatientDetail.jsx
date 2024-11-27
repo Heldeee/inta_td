@@ -28,7 +28,7 @@ const PatientDetail = ({ patient }) => {
 
     const sendPatientToFhir = async () => {
         try {
-            console.log(patient.idNos);
+            console.log(patient._id);
             const response = await axios.post(`http://localhost:5000/api/patients/transfer`, {}, { headers: { id: patient._id } });
             alert('Patient data sent to FHIR server successfully');
         } catch (error) {

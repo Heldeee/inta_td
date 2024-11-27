@@ -28,7 +28,7 @@ mongoose.connect(uri, {
 // Routes
 app.use('/api/patients', patientRoutes);
 app.use('/api/devices', deviceRoutes);
-app.use('/api/medicalRecords', medicalRecordRoutes);
+app.use('/api/medicalrecords', medicalRecordRoutes);
 app.use('/api/professionals', professionalRoutes);
 app.use('/api/cabinets', cabinetsRoutes);
 

@@ -79,7 +79,6 @@ const CabinetInfo = () => {
                                 <p>Name: {cabinet.name}</p>
                                 <p>Address: {cabinet.address}</p>
                                 <p>Phone: {cabinet.phone}</p>
-                                <p>ID Number: {cabinet.idNos}</p>
                             </li>
                         ))}
                     </ul>

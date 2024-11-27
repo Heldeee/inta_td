@@ -3,7 +3,7 @@ import Cabinet from '../models/Cabinet.js';
 // Get cabinet data by ID
 export const getCabinetInfo = async (req, res) => {
     try {
-        const cabinet = await Cabinet.findOne({ idNos: req.params.id });
+        const cabinet = await Cabinet.findOne({ _id: req.params.id });
         if (!cabinet) {
             return res.status(404).json({ error: 'Cabinet not found' });
         }

@@ -59,9 +59,8 @@ const TransferPatientForm = ({ onClose }) => {
         }
 
         try {
-            // Fetch detailed information for patient and doctor using `idNos`
-            const patientDetails = await axios.get(`http://localhost:5000/api/patients/${selectedPatient.idNos}`);
-            const doctorDetails = await axios.get(`http://localhost:5000/api/professionals/${selectedDoctor.idNos}`);
+            const patientDetails = await axios.get(`http://localhost:5000/api/patients/${selectedPatient._id}`);
+            const doctorDetails = await axios.get(`http://localhost:5000/api/professionals/${selectedDoctor._id}`);
 
             const dataToDownload = {
                 patient: patientDetails.data,
@@ -135,7 +134,7 @@ const TransferPatientForm = ({ onClose }) => {
                     >
                         <option value="">Select a patient</option>
                         {filteredPatients.map((patient) => (
-                            <option key={patient.idNos} value={patient.name}>
+                            <option key={patient._id} value={patient.name}>
                                 {patient.name}
                             </option>
                         ))}
@@ -174,7 +173,7 @@ const TransferPatientForm = ({ onClose }) => {
                     >
                         <option value="">Select a doctor</option>
                         {filteredDoctors.map((doctor) => (
-                            <option key={doctor.idNos} value={doctor.name}>
+                            <option key={doctor._id} value={doctor.name}>
                                 {doctor.name}
                             </option>
                         ))}

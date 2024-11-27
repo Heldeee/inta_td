@@ -4,7 +4,7 @@ import axios from 'axios';
 // Get patient data by ID
 export const getPatientInfo = async (req, res) => {
     try {
-        const patient = await Patient.findOne({ idNos: req.params.id });
+        const patient = await Patient.findOne({ _id: req.params.id });
         if (!patient) {
             return res.status(404).json({ error: 'Patient not found' });
         }

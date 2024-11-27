@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
-const AddPatientForm = ({ onClose, onAddPatient }) => {
+const AddPatientForm = ({ onClose }) => {
     const [formData, setFormData] = useState({
-        idNos: '',
         name: '',
         dateOfBirth: '',
         keycloakId: '',
@@ -73,9 +72,7 @@ const AddPatientForm = ({ onClose, onAddPatient }) => {
         e.preventDefault();
         try {
             const response = await axios.post('http://localhost:5000/api/patients', formData);
-            onAddPatient(response.data);
             setFormData({
-                idNos: '',
                 name: '',
                 dateOfBirth: '',
                 keycloakId: '',
@@ -202,7 +199,7 @@ const AddPatientForm = ({ onClose, onAddPatient }) => {
                     >
                         <option value="">Select a cabinet</option>
                         {cabinets.map((cabinet) => (
-                            <option key={cabinet._id} value={cabinet.idNos}>
+                            <option key={cabinet._id} value={cabinet._id}>
                                 {cabinet.name}
                             </option>
                         ))}

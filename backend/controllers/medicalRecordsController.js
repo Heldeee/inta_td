@@ -1,14 +1,13 @@
 import MedicalRecord from '../models/MedicalRecord.js';
 
-// Get a patient's medical records by idNos
-export const getMedicalRecordsByPatientIdNos = async (req, res) => {
+export const getMedicalRecordsByDeviceId = async (req, res) => {
     try {
-        const patientIdNos = req.params.idNos;
+        const deviceId = req.params.id;
 
-        const records = await MedicalRecord.find({ patientIdNos: patientIdNos });
+        const records = await MedicalRecord.find({ deviceId: deviceId });
 
         if (records.length === 0) {
-            return res.status(404).json({ message: 'No records found for this patient.' });
+            return res.status(404).json({ message: 'No records found for this device.' });
         }
 
         res.json(records);
@@ -21,11 +20,11 @@ export const getMedicalRecordsByPatientIdNos = async (req, res) => {
 // Create a new medical record for a patient
 export const createMedicalRecord = async (req, res) => {
     try {
-        const { patientIdNos, recordDate, bloodPressure, heartRate, oxygenSaturation, notes } = req.body;
+        const { patientId, recordDate, bloodPressure, heartRate, oxygenSaturation, notes } = req.body;
 
         // Create a new medical record document
         const newRecord = new MedicalRecord({
-            patientIdNos,
+            patientId,
             recordDate,
             bloodPressure,
             heartRate,

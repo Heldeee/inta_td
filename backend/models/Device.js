@@ -1,8 +1,8 @@
 import mongoose from 'mongoose';
 
 const medicalDeviceSchema = new mongoose.Schema({
-    patient_id: { type: mongoose.Schema.Types.ObjectId, ref: 'Patient', required: true },
-    doctor_id: { type: mongoose.Schema.Types.ObjectId, ref: 'Professional', required: true },
+    patientId: { type: mongoose.Schema.Types.ObjectId, ref: 'Patient', required: true },
+    doctorId: { type: mongoose.Schema.Types.ObjectId, ref: 'Professional', required: true },
     installationDate: { type: Date, default: Date.now }
 });
 

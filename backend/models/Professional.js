@@ -1,11 +1,10 @@
 import mongoose from 'mongoose';
 
-
 const professionalSchema = new mongoose.Schema({
-    idNos: { type: String, unique: true, required: true },
     name: String,
     role: String,
-    specialization: String
+    specialization: String,
+    cabinetId: { type: mongoose.Schema.Types.ObjectId, ref: 'Cabinet', required: true },
 });
 
 const Professional = mongoose.model('Professional', professionalSchema);

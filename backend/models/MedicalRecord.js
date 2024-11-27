@@ -1,7 +1,7 @@
 import mongoose from 'mongoose';
 
 const medicalRecordSchema = new mongoose.Schema({
-    patientIdnos: String,
+    deviceId: { type: mongoose.Schema.Types.ObjectId, ref: 'Device', required: true },
     recordDate: Date,
     bloodPressure: String,
     heartRate: String,

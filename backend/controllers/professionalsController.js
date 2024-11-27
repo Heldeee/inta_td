@@ -3,7 +3,7 @@ import Professional from '../models/Professional.js';
 // Get professional information by ID
 export const getProfessionalInfo = async (req, res) => {
     try {
-        const professional = await Professional.findOne({ idNos: req.params.id });
+        const professional = await Professional.findOne({ _id: req.params.id });
         if (!professional) {
             return res.status(404).json({ error: 'Professional not found' });
         }
