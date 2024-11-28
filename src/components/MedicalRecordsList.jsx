@@ -9,6 +9,10 @@ const MedicalRecordsList = () => {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
 
+    const prettyPrintDate = (date) => {
+        return new Date(date).toLocaleString();
+    };
+
     useEffect(() => {
         const fetchDevices = async () => {
             try {
@@ -28,9 +32,18 @@ const MedicalRecordsList = () => {
         setSelectedDevice(deviceId);
         setLoading(true);
         try {
-            const response = await axios.get(`http://localhost:5000/api/medicalrecords/${deviceId}`);
+            const response = await axios.get(`http://localhost:5000/api/devices/${deviceId}`);
             setRecords(response.data);
             setLoading(false);
+
+            try {
+                const response2 = await axios.get(`http://localhost:5000/api/devices/${deviceId}/records`);
+            }
+            catch (error) {
+                setError('Error fetching medical records');
+                setLoading(false);
+            }
+
         } catch (error) {
             setError('Error fetching medical records');
             setLoading(false);
@@ -52,7 +65,7 @@ const MedicalRecordsList = () => {
                 <option value="" disabled>Select a device</option>
                 {devices.map((device) => (
                     <option key={device._id} value={device._id}>
-                        {device.patientId.name} - {device.type}
+                        {device.patientId.name} - {device._id} - {prettyPrintDate(device.installationDate)}
                     </option>
                 ))}
             </select>
@@ -75,15 +88,7 @@ const MedicalRecordsList = () => {
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    {records.map((record) => (
-                                        <tr key={record._id}>
-                                            <td>{new Date(record.recordDate).toLocaleString()}</td>
-                                            <td>{record.bloodPressure}</td>
-                                            <td>{record.heartRate}</td>
-                                            <td>{record.oxygenSaturation}</td>
-                                            <td>{record.notes}</td>
-                                        </tr>
-                                    ))}
+
                                 </tbody>
                             </table>
                         </div>

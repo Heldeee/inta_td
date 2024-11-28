@@ -104,9 +104,9 @@ const PatientsInfo = ({ onSelectPatient }) => {
                     borderRadius: '8px',
                     padding: '10px'
                 }}>
-                    <ul>
+                    <div>
                         {filteredPatients.map((patient) => (
-                            <li key={patient._id} style={{
+                            <div key={patient._id} style={{
                                 borderBottom: '1px solid #eee',
                                 paddingBottom: '10px',
                                 marginBottom: '10px',
@@ -118,9 +118,9 @@ const PatientsInfo = ({ onSelectPatient }) => {
                                 {cabinets[patient._id] && (
                                     <p>Cabinet: {cabinets[patient._id].name}</p>
                                 )}
-                            </li>
+                            </div>
                         ))}
-                    </ul>
+                    </div>
                 </div>
             )}
         </div>

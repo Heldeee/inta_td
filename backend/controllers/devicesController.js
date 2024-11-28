@@ -1,16 +1,17 @@
 import MedicalDevice from '../models/Device.js';
+import MedicalRecord from '../models/MedicalRecord.js';
 import mongoose from 'mongoose';
 
-export const getDeviceDataByPatientId = async (req, res) => {
+export const getDeviceDataById = async (req, res) => {
     try {
-        const patientId = mongoose.Types.ObjectId.isValid(req.params.patientId)
-            ? mongoose.Types.ObjectId(req.params.patientId)
-            : req.params.patientId;
+        const deviceId = mongoose.Types.ObjectId.isValid(req.params.deviceId)
+            ? mongoose.Types.ObjectId(req.params.deviceId)
+            : req.params.deviceId;
 
-        const deviceData = await MedicalDevice.find({ patient_id: patientId }).populate('patientId doctorId');
+        const deviceData = await MedicalDevice.findById(deviceId).populate('patientId doctorId');
 
-        if (!deviceData.length) {
-            return res.status(404).json({ message: 'No devices found for this patient.' });
+        if (!deviceData) {
+            return res.status(404).json({ message: 'Device not found.' });
         }
 
         // Return the device data
@@ -47,12 +48,32 @@ export const getAllDevices = async (req, res) => {
         const allDevices = await MedicalDevice.find().populate('patientId doctorId');
 
         if (!allDevices.length) {
-            return res.status(404).json({ message: 'No devices found.' });
+            return res.status(200).json([]); // Return an empty array if no devices are found
         }
 
         res.json(allDevices);
     } catch (error) {
         console.error('Error fetching all devices:', error);
+        res.status(500).json({ error: 'Internal server error' });
+    }
+};
+
+export const getDeviceRecordsById = async (req, res) => {
+    try {
+        const deviceId = mongoose.Types.ObjectId.isValid(req.params.deviceId)
+            ? mongoose.Types.ObjectId(req.params.deviceId)
+            : req.params.deviceId;
+
+        const records = await MedicalRecord.find({ deviceId: deviceId });
+
+        if (records.length === 0) {
+            //return empty array if no records are found
+            return res.status(200).json([]);
+        }
+
+        res.json(records);
+    } catch (error) {
+        console.error('Error fetching medical records:', error);
         res.status(500).json({ error: 'Internal server error' });
     }
 };

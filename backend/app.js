@@ -7,6 +7,8 @@ import deviceRoutes from './routes/devicesRoutes.js';
 import medicalRecordRoutes from './routes/medicalRecordsRoutes.js';
 import professionalRoutes from './routes/professionalsRoutes.js';
 import cabinetsRoutes from './routes/cabinetsRoutes.js';
+import observationsRoutes from './routes/observationsRoutes.js';
+import encountersRoutes from './routes/encountersRoutes.js';
 
 dotenv.config();
 
@@ -31,6 +33,8 @@ app.use('/api/devices', deviceRoutes);
 app.use('/api/medicalrecords', medicalRecordRoutes);
 app.use('/api/professionals', professionalRoutes);
 app.use('/api/cabinets', cabinetsRoutes);
+app.use('/api/observations', observationsRoutes);
+app.use('/api/encounters', encountersRoutes);
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));

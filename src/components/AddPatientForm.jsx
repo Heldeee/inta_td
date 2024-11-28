@@ -10,6 +10,8 @@ const AddPatientForm = ({ onClose }) => {
         gender: '' // Added gender field
     });
     const [cabinets, setCabinets] = useState([]);
+    const [practitioners, setPractitioners] = useState([]);
+    const [filteredPractitioners, setFilteredPractitioners] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
 
@@ -38,6 +40,21 @@ const AddPatientForm = ({ onClose }) => {
     }, []);
 
     useEffect(() => {
+        const fetchPractitioners = async () => {
+            try {
+                const response = await axios.get('http://localhost:5000/api/professionals');
+                setPractitioners(response.data);
+                setLoading(false);
+            } catch (error) {
+                setError('Error fetching practitioners data');
+                setLoading(false);
+            }
+        };
+
+        fetchPractitioners();
+    }, []);
+
+    useEffect(() => {
         const fetchCabinets = async () => {
             try {
                 const response = await axios.get('http://localhost:5000/api/cabinets');
@@ -51,6 +68,15 @@ const AddPatientForm = ({ onClose }) => {
 
         fetchCabinets();
     }, []);
+
+    useEffect(() => {
+        if (formData.cabinetId) {
+            const filtered = practitioners.filter(practitioner => practitioner.cabinetId === formData.cabinetId);
+            setFilteredPractitioners(filtered);
+        } else {
+            setFilteredPractitioners([]);
+        }
+    }, [formData.cabinetId, practitioners]);
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -68,6 +94,14 @@ const AddPatientForm = ({ onClose }) => {
         }));
     };
 
+    const handlePractitionerChange = (e) => {
+        const selectedPractitionerId = e.target.value;
+        setFormData((prevState) => ({
+            ...prevState,
+            generalPractitioner: selectedPractitionerId
+        }));
+    };
+
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
@@ -77,7 +111,8 @@ const AddPatientForm = ({ onClose }) => {
                 dateOfBirth: '',
                 keycloakId: '',
                 cabinetId: '',
-                gender: ''
+                gender: '',
+                generalPractitioner: ''
             });
             onClose();
         } catch (error) {
@@ -205,6 +240,33 @@ const AddPatientForm = ({ onClose }) => {
                         ))}
                     </select>
                 </label>
+                {formData.cabinetId && (
+                    <label style={{
+                        display: 'flex',
+                        flexDirection: 'column',
+                        gap: '8px'
+                    }}>
+                        Practitioner:
+                        <select
+                            name="generalPractitioner"
+                            value={formData.generalPractitioner}
+                            onChange={handlePractitionerChange}
+                            required
+                            style={{
+                                padding: '10px',
+                                borderRadius: '5px',
+                                border: '1px solid #ccc'
+                            }}
+                        >
+                            <option value="">Select a practitioner</option>
+                            {filteredPractitioners.map((practitioner) => (
+                                <option key={practitioner._id} value={practitioner._id}>
+                                    {practitioner.name}
+                                </option>
+                            ))}
+                        </select>
+                    </label>
+                )}
 
                 <div style={{
                     display: 'flex',

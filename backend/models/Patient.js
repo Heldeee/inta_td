@@ -19,6 +19,8 @@ const patientSchema = new mongoose.Schema({
     deceased: Boolean,
     maritalStatus: { type: String, enum: ['single', 'married', 'divorced', 'widowed', 'separated'] },
     photo: String,
+    generalPractitioner: { type: mongoose.Schema.Types.ObjectId, ref: 'Professional' },
+    medicalHistory: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Observation' }]
 });
 
 const Patient = mongoose.model('Patient', patientSchema);

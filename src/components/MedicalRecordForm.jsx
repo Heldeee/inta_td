@@ -6,7 +6,6 @@ const MedicalRecordForm = () => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        // Envoyer les données du formulaire au backend
         console.log('Submitting medical record:', { bloodPressure, heartRate });
     };
 

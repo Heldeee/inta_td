@@ -1,8 +1,13 @@
 import express from 'express';
 const router = express.Router();
-import { getMedicalRecordsByDeviceId, createMedicalRecord, getAllMedicalRecords } from '../controllers/medicalRecordsController.js';
+import {
+    getMedicalRecordsByDeviceId,
+    getMedicalRecordById,
+    createMedicalRecord,
+    getAllMedicalRecords
+} from '../controllers/medicalRecordsController.js';
 
-router.get('/:id', getMedicalRecordsByDeviceId);
+router.get('/:id', getMedicalRecordById);
 router.get('/', getAllMedicalRecords);
 router.post('/', createMedicalRecord);
 

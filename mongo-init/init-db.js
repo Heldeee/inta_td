@@ -3,6 +3,8 @@ db.createCollection('patients');
 db.createCollection('medicalrecords');
 db.createCollection('medicaldevices');
 db.createCollection('cabinets');
+db.createCollection('observations');
+db.createCollection('encounters');
 
 // Insert cabinets and retrieve their _id fields
 const cabinets = db.cabinets.insertMany([
@@ -67,7 +69,8 @@ const patients = db.patients.insertMany([
         ],
         "maritalStatus": "single",
         "photo": "https://example.com/photos/alice.jpg",
-        "deceased": false
+        "deceased": false,
+        "generalPractitioner": professional1Id
     },
     {
         "name": "Bob Smith",
@@ -94,7 +97,8 @@ const patients = db.patients.insertMany([
         ],
         "maritalStatus": "married",
         "photo": "https://example.com/photos/bob.jpg",
-        "deceased": false
+        "deceased": false,
+        "generalPractitioner": professional2Id
     }
 ]);
 
@@ -125,14 +129,16 @@ db.medicalrecords.insertMany([
         "recordDate": "2024-11-11T00:00:00Z",
         "bloodPressure": "120/80",
         "heartRate": 75,
-        "oxygenSaturation": 98
+        "oxygenSaturation": 98,
+        "notes": "Patient is responding well to treatment."
     },
     {
         "deviceId": device1Id,
         "recordDate": "2024-11-11T01:00:00Z",
         "bloodPressure": "118/79",
         "heartRate": 74,
-        "oxygenSaturation": 97
+        "oxygenSaturation": 97,
+        "notes": "Patient showed slight improvement."
     },
     {
         "deviceId": device1Id,
@@ -308,5 +314,64 @@ db.medicalrecords.insertMany([
         "bloodPressure": "121/79",
         "heartRate": 73,
         "oxygenSaturation": 98
+    }
+]);
+
+// Insert observations and retrieve their _id fields
+const observations = db.observations.insertMany([
+    {
+        "status": "final",
+        "code": "BP",
+        "subject": patient1Id,
+        "effectiveDateTime": "2024-11-11T00:00:00Z",
+        "valueString": "120/80",
+        "interpretation": ["normal"],
+        "note": ["Blood pressure is within normal range."]
+    },
+    {
+        "status": "final",
+        "code": "HR",
+        "subject": patient2Id,
+        "effectiveDateTime": "2024-11-11T01:00:00Z",
+        "valueString": "75",
+        "interpretation": ["normal"],
+        "note": ["Heart rate is within normal range."]
+    }
+]);
+
+const observation1Id = observations.insertedIds[0];
+const observation2Id = observations.insertedIds[1];
+
+// Insert encounters and retrieve their _id fields
+const encounters = db.encounters.insertMany([
+    {
+        "status": "completed",
+        "class": "outpatient",
+        "subject": patient1Id,
+        "participant": [
+            {
+                "individual": professional1Id,
+                "period": { "start": "2024-11-11T00:00:00Z", "end": "2024-11-11T01:00:00Z" }
+            }
+        ],
+        "period": { "start": "2024-11-11T00:00:00Z", "end": "2024-11-11T01:00:00Z" },
+        "reasonCode": ["routine check-up"],
+        "diagnosis": [observation1Id],
+        "serviceProvider": cabinet1Id
+    },
+    {
+        "status": "completed",
+        "class": "outpatient",
+        "subject": patient2Id,
+        "participant": [
+            {
+                "individual": professional2Id,
+                "period": { "start": "2024-11-11T01:00:00Z", "end": "2024-11-11T02:00:00Z" }
+            }
+        ],
+        "period": { "start": "2024-11-11T01:00:00Z", "end": "2024-11-11T02:00:00Z" },
+        "reasonCode": ["routine check-up"],
+        "diagnosis": [observation2Id],
+        "serviceProvider": cabinet2Id
     }
 ]);
