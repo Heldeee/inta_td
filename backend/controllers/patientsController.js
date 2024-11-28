@@ -29,11 +29,80 @@ export const getAllPatients = async (req, res) => {
 // Create new patient
 export const createPatient = async (req, res) => {
     try {
-        const patient = new Patient(req.body);
-        await patient.save();
-        res.status(201).json(patient);
+        const {
+            name,
+            active,
+            dateOfBirth,
+            gender,
+            cabinetId,
+            keycloakId,
+            urgentContact,
+            telecom,
+            deceased,
+            maritalStatus,
+            photo,
+            generalPractitioner
+        } = req.body;
+
+        // Validate required fields
+        if (!name || !dateOfBirth || !gender || !cabinetId || !keycloakId) {
+            return res.status(400).json({
+                error: 'Missing required fields',
+                required: ['name', 'dateOfBirth', 'gender', 'cabinetId', 'keycloakId']
+            });
+        }
+
+        // Create new patient document
+        const patient = new Patient({
+            name,
+            active: active ?? true,
+            dateOfBirth: new Date(dateOfBirth),
+            gender,
+            cabinetId,
+            keycloakId,
+            urgentContact: urgentContact || {
+                name: '',
+                phoneNumber: ''
+            },
+            telecom: telecom || [{
+                system: 'phone',
+                value: '',
+                use: 'home'
+            }],
+            deceased: deceased ?? false,
+            maritalStatus: maritalStatus || '',
+            photo: photo || '',
+            generalPractitioner
+        });
+
+        // Save patient to database
+        const savedPatient = await patient.save();
+
+        // Return success response
+        res.status(201).json({
+            message: 'Patient created successfully',
+            patient: savedPatient
+        });
+
     } catch (error) {
         console.error('Error creating patient:', error);
+
+        // Handle duplicate keycloakId error
+        if (error.code === 11000) {
+            return res.status(400).json({
+                error: 'Patient with this keycloakId already exists',
+                field: 'keycloakId'
+            });
+        }
+
+        // Handle validation errors
+        if (error.name === 'ValidationError') {
+            return res.status(400).json({
+                error: 'Validation error',
+                details: error.message
+            });
+        }
+
         res.status(500).json({ error: 'Internal server error' });
     }
 };

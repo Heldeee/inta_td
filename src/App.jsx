@@ -5,6 +5,7 @@ import LoginPage from './components/LoginPage';
 import DashboardPage from './components/DashboardPage';
 import MedicalRecordForm from './components/MedicalRecordForm';
 import DeviceConnectionPage from './components/DeviceConnectionPage';
+import AddPatientPage from './components/AddPatientPage';
 
 const App = () => {
   const [initialized, setInitialized] = useState(false);
@@ -49,6 +50,8 @@ const App = () => {
             path="/"
             element={<Navigate to="/dashboard" replace />}
           />
+          <Route path="/" element={<DashboardPage />} />
+          <Route path="/add-patient" element={<AddPatientPage />} />
         </Routes>
       </div>
     </Router>

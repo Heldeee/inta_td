@@ -90,10 +90,6 @@ const PatientsInfo = ({ onSelectPatient }) => {
                     border: '1px solid #ccc'
                 }}
             />
-            <button onClick={() => setShowAddPatientForm(true)}>Add Patient</button>
-            {showAddPatientForm && (
-                <AddPatientForm onClose={() => setShowAddPatientForm(false)} onAddPatient={handleAddPatient} />
-            )}
             {filteredPatients.length === 0 ? (
                 <p>No patients found.</p>
             ) : (
