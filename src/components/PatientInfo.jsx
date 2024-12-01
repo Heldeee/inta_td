@@ -1,14 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import AddPatientForm from './AddPatientForm';
+import { Search, User } from 'lucide-react';
+import '../styles/PatientInfo.css';
 
-const PatientsInfo = ({ onSelectPatient }) => {
+const PatientsInfo = ({ onSelectPatient, selectedPatient }) => {
     const [patients, setPatients] = useState([]);
     const [filteredPatients, setFilteredPatients] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const [searchQuery, setSearchQuery] = useState('');
-    const [selectedPatient, setSelectedPatient] = useState(null);
     const [showAddPatientForm, setShowAddPatientForm] = useState(false);
     const [cabinets, setCabinets] = useState({});
 
@@ -75,48 +75,42 @@ const PatientsInfo = ({ onSelectPatient }) => {
     }
 
     return (
-        <div>
-            <h2>Patients List</h2>
-            <input
-                type="text"
-                placeholder="Search by name"
-                value={searchQuery}
-                onChange={handleSearch}
-                style={{
-                    marginBottom: '10px',
-                    padding: '8px',
-                    width: '100%',
-                    borderRadius: '4px',
-                    border: '1px solid #ccc'
-                }}
-            />
+        <div className="patient-list-container">
+            <div className="search-container">
+                <input
+                    type="text"
+                    className="search-input"
+                    placeholder="Search patients..."
+                    value={searchQuery}
+                    onChange={handleSearch}
+                />
+            </div>
+
             {filteredPatients.length === 0 ? (
-                <p>No patients found.</p>
+                <div className="no-results">
+                    <p>No patients found</p>
+                </div>
             ) : (
-                <div style={{
-                    maxHeight: '300px',
-                    overflowY: 'auto',
-                    border: '1px solid #ddd',
-                    borderRadius: '8px',
-                    padding: '10px'
-                }}>
-                    <div>
-                        {filteredPatients.map((patient) => (
-                            <div key={patient._id} style={{
-                                borderBottom: '1px solid #eee',
-                                paddingBottom: '10px',
-                                marginBottom: '10px',
-                                cursor: 'pointer',
-                                backgroundColor: selectedPatient && selectedPatient._id === patient._id ? '#f0f0f0' : 'transparent'
-                            }} onClick={() => onSelectPatient(patient)}>
-                                <h3>{patient.name}</h3>
-                                <p>Date of Birth: {prettyDate(patient.dateOfBirth)}</p>
+                <div className="patients-list">
+                    {filteredPatients.map((patient) => (
+                        <div
+                            key={patient._id}
+                            className={`patient-card ${selectedPatient && selectedPatient._id === patient._id ? 'selected' : ''}`}
+                            onClick={() => onSelectPatient(patient)}
+                        >
+                            <div className="patient-name">
+                                {patient.name}
+                            </div>
+                            <div className="patient-info">
+                                <span>{prettyDate(patient.dateOfBirth)}</span>
                                 {cabinets[patient._id] && (
-                                    <p>Cabinet: {cabinets[patient._id].name}</p>
+                                    <span className="cabinet-tag">
+                                        {cabinets[patient._id].name}
+                                    </span>
                                 )}
                             </div>
-                        ))}
-                    </div>
+                        </div>
+                    ))}
                 </div>
             )}
         </div>

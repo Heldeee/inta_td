@@ -5,16 +5,16 @@ import {
     getAllPatients,
     createPatient,
     getPatientsByDoctor,
-    getPatientByKeycloakId,
     sendPatientToFhir,
-    printMiddleware
+    printMiddleware,
+    updatePatient
 } from '../controllers/patientsController.js';
 
 router.post('/transfer', printMiddleware, sendPatientToFhir); // Send patient data to FHIR server
-router.get('/keycloak/:keycloakId', getPatientByKeycloakId); // Get patient by keycloak ID
 router.get('/doctor/:doctorId', getPatientsByDoctor); // Get all patients by doctor ID
 router.get('/:id', getPatientInfo); // Get specific patient by ID
 router.get('/', getAllPatients); // Get all patients
 router.post('/', createPatient); // Create new patient
+router.put('/:id', updatePatient); // Update patient
 
 export default router;

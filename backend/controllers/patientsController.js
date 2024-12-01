@@ -35,7 +35,6 @@ export const createPatient = async (req, res) => {
             dateOfBirth,
             gender,
             cabinetId,
-            keycloakId,
             urgentContact,
             telecom,
             deceased,
@@ -45,10 +44,10 @@ export const createPatient = async (req, res) => {
         } = req.body;
 
         // Validate required fields
-        if (!name || !dateOfBirth || !gender || !cabinetId || !keycloakId) {
+        if (!name || !dateOfBirth || !gender || !cabinetId) {
             return res.status(400).json({
                 error: 'Missing required fields',
-                required: ['name', 'dateOfBirth', 'gender', 'cabinetId', 'keycloakId']
+                required: ['name', 'dateOfBirth', 'gender', 'cabinetId']
             });
         }
 
@@ -59,7 +58,6 @@ export const createPatient = async (req, res) => {
             dateOfBirth: new Date(dateOfBirth),
             gender,
             cabinetId,
-            keycloakId,
             urgentContact: urgentContact || {
                 name: '',
                 phoneNumber: ''
@@ -87,14 +85,6 @@ export const createPatient = async (req, res) => {
     } catch (error) {
         console.error('Error creating patient:', error);
 
-        // Handle duplicate keycloakId error
-        if (error.code === 11000) {
-            return res.status(400).json({
-                error: 'Patient with this keycloakId already exists',
-                field: 'keycloakId'
-            });
-        }
-
         // Handle validation errors
         if (error.name === 'ValidationError') {
             return res.status(400).json({
@@ -114,21 +104,6 @@ export const getPatientsByDoctor = async (req, res) => {
         res.json(patients);
     } catch (error) {
         console.error('Error fetching patients by doctor:', error);
-        res.status(500).json({ error: 'Internal server error' });
-    }
-};
-
-// Get patient data by keycloak ID
-export const getPatientByKeycloakId = async (req, res) => {
-    try {
-        const patient = await Patient.findOne({ keycloakId: req.params.keycloakId });
-        if (!patient) {
-            return res.status(404).json({ error: 'Patient not found' });
-        }
-        res.json(patient);
-    }
-    catch (error) {
-        console.error('Error fetching patient data:', error);
         res.status(500).json({ error: 'Internal server error' });
     }
 };
@@ -161,6 +136,36 @@ export const sendPatientToFhir = async (req, res) => {
         }
     } catch (error) {
         console.error('Error sending patient data to FHIR server:', error);
+        res.status(500).json({ error: 'Internal server error' });
+    }
+};
+
+export const updatePatient = async (req, res) => {
+    try {
+        if (!req.params.id) {
+            return res.status(400).json({ error: 'Patient ID is required' });
+        }
+
+        const updates = { ...req.body };
+
+        const updatedPatient = await Patient.findByIdAndUpdate(
+            req.params.id,
+            { $set: updates },
+            { new: true, runValidators: true }
+        );
+
+        if (!updatedPatient) {
+            return res.status(404).json({ error: 'Patient not found' });
+        }
+
+        res.json(updatedPatient);
+    } catch (error) {
+        console.error('Error updating patient:', error);
+        if (error.name === 'ValidationError') {
+            return res.status(400).json({ error: 'Validation error', details: error.message });
+        } else if (error.name === 'CastError') {
+            return res.status(400).json({ error: 'Invalid patient ID format' });
+        }
         res.status(500).json({ error: 'Internal server error' });
     }
 };

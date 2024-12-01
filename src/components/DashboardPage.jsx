@@ -6,6 +6,7 @@ import {
     getUserRoles,
     logout,
     getToken,
+    getUserInfo,
 } from '../services/keycloakService';
 import { Users, FileText, Stethoscope, LogOut, PlusCircle, Loader } from 'lucide-react';
 
@@ -22,6 +23,7 @@ const DashboardPage = () => {
     const [selectedPatient, setSelectedPatient] = useState(null);
     const [alerts, setAlerts] = useState([]);
     const [isTransferPatientModalOpen, setIsTransferPatientModalOpen] = useState(false);
+    const [userInfo, setUserInfo] = useState(null);
 
     useEffect(() => {
         if (!isAuthenticated()) {
@@ -33,7 +35,11 @@ const DashboardPage = () => {
             try {
                 setLoading(true);
                 const roles = getUserRoles();
+                const userDetails = getUserInfo();
                 setUserRole(roles[0]);
+                setUserInfo(userDetails);
+                console.log('User connected:', userDetails.preferred_username);
+                console.log('User roles:', roles);
                 setLoading(false);
             } catch (error) {
                 console.error('Error fetching dashboard data:', error);
@@ -82,6 +88,7 @@ const DashboardPage = () => {
                         onSelectPatient={(patient) => {
                             setSelectedPatient(patient);
                         }}
+                        selectedPatient={selectedPatient}
                     />
                 </div>
             </div>
@@ -90,9 +97,15 @@ const DashboardPage = () => {
             <div className="main-content">
                 {/* Header */}
                 <div className="header">
-                    <h1 className="header-title">
-                        Dashboard - {userRole.charAt(0).toUpperCase() + userRole.slice(1)}
-                    </h1>
+                    <div className="header-content">
+                        <h1 className="header-title">Medical Dashboard</h1>
+                        {userInfo && (
+                            <div className="user-info">
+                                <span className="user-name">{userInfo.preferred_username}</span>
+                                <span className="user-role">{userRole}</span>
+                            </div>
+                        )}
+                    </div>
                     <button
                         onClick={handleLogout}
                         className="logout-button"

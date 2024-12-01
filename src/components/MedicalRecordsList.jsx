@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import './MedicalRecordsList.css'; // Import the CSS file
+import '../styles/MedicalRecordsList.css'; // Import the CSS file
 
 const MedicalRecordsList = () => {
     const [devices, setDevices] = useState([]);

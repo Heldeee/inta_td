@@ -6,7 +6,6 @@ const patientSchema = new mongoose.Schema({
     dateOfBirth: Date,
     gender: String,
     cabinetId: { type: mongoose.Schema.Types.ObjectId, ref: 'Cabinet', required: true },
-    keycloakId: { type: String, unique: true, required: true },
     urgentContact: {
         name: String,
         phoneNumber: String

@@ -10,10 +10,6 @@
             {
                 "name": "doctor",
                 "description": "Médecin cardiologue"
-            },
-            {
-                "name": "patient",
-                "description": "Patient"
             }
         ]
     },
@@ -70,19 +66,6 @@
             ],
             "realmRoles": [
                 "secretary"
-            ]
-        },
-        {
-            "username": "patient1",
-            "enabled": true,
-            "credentials": [
-                {
-                    "type": "password",
-                    "value": "password"
-                }
-            ],
-            "realmRoles": [
-                "patient"
             ]
         }
     ]

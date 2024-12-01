@@ -50,7 +50,6 @@ const patients = db.patients.insertMany([
         "gender": "female",
         "dateOfBirth": "1990-01-01T00:00:00Z",
         "cabinetId": cabinet1Id,
-        "keycloakId": "12345",
         "urgentContact": {
             "name": "Bob Smith",
             "phoneNumber": "123-456-7890"
@@ -78,7 +77,6 @@ const patients = db.patients.insertMany([
         "gender": "male",
         "cabinetId": cabinet2Id,
         "dateOfBirth": "1990-01-01T00:00:00Z",
-        "keycloakId": "12346",
         "urgentContact": {
             "name": "Alice Smith",
             "phoneNumber": "123-456-7890"

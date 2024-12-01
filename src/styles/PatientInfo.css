@@ -1,83 +1,79 @@
-.patients-container {
-    padding: 2rem;
-    max-width: 900px;
-    margin: 0 auto;
-}
-
-.patients-title {
-    color: #2c3e50;
-    margin-bottom: 1.5rem;
-    font-size: 2rem;
-    font-weight: 600;
+.patient-list-container {
+    padding: 0.5rem;
+    width: 100%;
+    overflow-x: hidden;
 }
 
 .search-input {
     width: 100%;
-    padding: 12px;
-    border: 2px solid #e2e8f0;
-    border-radius: 8px;
-    font-size: 1rem;
-    transition: all 0.3s ease;
-    margin-bottom: 1.5rem;
+    padding: 0.75rem;
+    border: 1px solid #e2e8f0;
+    border-radius: 0.5rem;
+    margin-bottom: 1rem;
+    background-color: #f8fafc;
+    transition: all 0.2s;
 }
 
 .search-input:focus {
     outline: none;
-    border-color: #3498db;
-    box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.2);
+    border-color: #3b82f6;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
 }
 
 .patients-list {
-    max-height: 70vh;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    max-height: calc(100vh - 12rem);
     overflow-y: auto;
-    border-radius: 12px;
-    background: white;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    padding: 1rem;
+    width: 100%;
+    overflow-x: hidden;
 }
 
 .patient-card {
+    background-color: white;
+    border-radius: 0.75rem;
     padding: 1rem;
-    border-radius: 8px;
-    margin-bottom: 1rem;
-    background: #f8fafc;
-    transition: all 0.3s ease;
+    cursor: pointer;
+    transition: all 0.2s;
     border: 1px solid #e2e8f0;
 }
 
 .patient-card:hover {
     transform: translateY(-2px);
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
 }
 
 .patient-card.selected {
-    background: #e3f2fd;
-    border-color: #2196f3;
+    border-color: #3b82f6;
+    background-color: #eff6ff;
 }
 
 .patient-name {
-    color: #2c3e50;
-    font-size: 1.25rem;
     font-weight: 600;
-    margin-bottom: 0.5rem;
+    color: #1e293b;
+    margin-bottom: 0.25rem;
+    font-size: 1rem;
 }
 
 .patient-info {
     color: #64748b;
-    font-size: 0.95rem;
+    font-size: 0.875rem;
     display: flex;
-    gap: 1.5rem;
-}
-
-.info-item {
-    display: flex;
-    align-items: center;
     gap: 0.5rem;
+    align-items: center;
 }
 
-.no-patients {
+.cabinet-tag {
+    background-color: #e2e8f0;
+    padding: 0.25rem 0.5rem;
+    border-radius: 0.25rem;
+    font-size: 0.75rem;
+    color: #475569;
+}
+
+.no-results {
     text-align: center;
     color: #64748b;
     padding: 2rem;
-    font-size: 1.1rem;
 }

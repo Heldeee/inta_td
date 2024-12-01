@@ -9,7 +9,6 @@ const AddPatientForm = ({ onClose }) => {
         dateOfBirth: '',
         gender: '',
         cabinetId: '',
-        keycloakId: '',
         urgentContact: {
             name: '',
             phoneNumber: ''
@@ -29,30 +28,6 @@ const AddPatientForm = ({ onClose }) => {
     const [filteredPractitioners, setFilteredPractitioners] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
-
-    useEffect(() => {
-        const generateIdNumber = () => {
-            setFormData((prevState) => ({
-                ...prevState,
-                idNos: Math.floor(Math.random() * 1000000).toString()
-            }));
-        };
-
-        const generateAlphaNumericId = (length = 10) => {
-            const chars = 'abcdefghijklmnopqrstuvwxyz0123456789';
-            let result = '';
-            for (let i = 0; i < length; i++) {
-                result += chars.charAt(Math.floor(Math.random() * chars.length));
-            }
-            setFormData((prevState) => ({
-                ...prevState,
-                keycloakId: result
-            }));
-        };
-
-        generateIdNumber();
-        generateAlphaNumericId();
-    }, []);
 
     useEffect(() => {
         const fetchPractitioners = async () => {
@@ -170,7 +145,6 @@ const AddPatientForm = ({ onClose }) => {
                 dateOfBirth: '',
                 gender: '',
                 cabinetId: '',
-                keycloakId: '',
                 urgentContact: {
                     name: '',
                     phoneNumber: ''
