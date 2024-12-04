@@ -319,26 +319,90 @@ db.medicalrecords.insertMany([
 const observations = db.observations.insertMany([
     {
         "status": "final",
-        "code": "BP",
+        "code": "blood-pressure",
         "subject": patient1Id,
         "effectiveDateTime": "2024-11-11T00:00:00Z",
         "valueString": "120/80",
         "interpretation": ["normal"],
-        "note": ["Blood pressure is within normal range."]
+        "note": ["Blood pressure is within normal range"],
+        "device": device1Id,
+        "component": [
+            {
+                "code": "systolic",
+                "valueInteger": 120,
+                "interpretation": ["normal"]
+            },
+            {
+                "code": "diastolic",
+                "valueInteger": 80,
+                "interpretation": ["normal"]
+            }
+        ]
     },
     {
         "status": "final",
-        "code": "HR",
-        "subject": patient2Id,
-        "effectiveDateTime": "2024-11-11T01:00:00Z",
-        "valueString": "75",
+        "code": "heart-rate",
+        "subject": patient1Id,
+        "effectiveDateTime": "2024-11-11T00:00:00Z",
+        "valueInteger": 75,
         "interpretation": ["normal"],
-        "note": ["Heart rate is within normal range."]
+        "note": ["Heart rate is within normal range"],
+        "device": device1Id
+    },
+    {
+        "status": "final",
+        "code": "body-temperature",
+        "subject": patient1Id,
+        "effectiveDateTime": "2024-11-11T00:00:00Z",
+        "valueString": "37.2°C",
+        "interpretation": ["normal"],
+        "device": device1Id
+    },
+    {
+        "status": "final",
+        "code": "blood-pressure",
+        "subject": patient2Id,
+        "effectiveDateTime": "2024-11-11T00:00:00Z",
+        "valueString": "130/85",
+        "interpretation": ["high"],
+        "note": ["Blood pressure is slightly elevated"],
+        "device": device2Id,
+        "component": [
+            {
+                "code": "systolic",
+                "valueInteger": 130,
+                "interpretation": ["high"]
+            },
+            {
+                "code": "diastolic",
+                "valueInteger": 85,
+                "interpretation": ["high"]
+            }
+        ]
+    },
+    {
+        "status": "final",
+        "code": "heart-rate",
+        "subject": patient2Id,
+        "effectiveDateTime": "2024-11-11T00:00:00Z",
+        "valueInteger": 82,
+        "interpretation": ["normal"],
+        "note": ["Heart rate is within normal range"],
+        "device": device2Id
+    },
+    {
+        "status": "final",
+        "code": "body-temperature",
+        "subject": patient2Id,
+        "effectiveDateTime": "2024-11-11T00:00:00Z",
+        "valueString": "37.5°C",
+        "interpretation": ["normal"],
+        "device": device2Id
     }
 ]);
 
 const observation1Id = observations.insertedIds[0];
-const observation2Id = observations.insertedIds[1];
+const observation2Id = observations.insertedIds[3];
 
 // Insert encounters and retrieve their _id fields
 const encounters = db.encounters.insertMany([

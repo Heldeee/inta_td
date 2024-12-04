@@ -1,4 +1,3 @@
-
 import Encounter from '../models/Encounter.js';
 
 // Get encounter by ID
@@ -19,6 +18,17 @@ export const getEncounter = async (req, res) => {
 export const getAllEncounters = async (req, res) => {
     try {
         const encounters = await Encounter.find();
+        res.json(encounters);
+    } catch (error) {
+        console.error('Error fetching encounters:', error);
+        res.status(500).json({ error: 'Internal server error' });
+    }
+};
+
+// Get encounters by patient ID
+export const getEncountersByPatient = async (req, res) => {
+    try {
+        const encounters = await Encounter.find({ subject: req.params.patientId });
         res.json(encounters);
     } catch (error) {
         console.error('Error fetching encounters:', error);

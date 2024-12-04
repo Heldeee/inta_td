@@ -6,11 +6,10 @@ import {
     createPatient,
     getPatientsByDoctor,
     sendPatientToFhir,
-    printMiddleware,
     updatePatient
 } from '../controllers/patientsController.js';
 
-router.post('/transfer', printMiddleware, sendPatientToFhir); // Send patient data to FHIR server
+router.post('/transfer', sendPatientToFhir); // Send patient data to FHIR server
 router.get('/doctor/:doctorId', getPatientsByDoctor); // Get all patients by doctor ID
 router.get('/:id', getPatientInfo); // Get specific patient by ID
 router.get('/', getAllPatients); // Get all patients

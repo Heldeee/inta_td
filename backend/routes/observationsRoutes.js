@@ -1,8 +1,9 @@
 
 import express from 'express';
 const router = express.Router();
-import { getObservation, getAllObservations, createObservation, updateObservation, deleteObservation } from '../controllers/observationsController.js';
+import { getObservation, getAllObservations, createObservation, updateObservation, deleteObservation, getObservationsByPatient } from '../controllers/observationsController.js';
 
+router.get('/patient/:patientId', getObservationsByPatient); // Get observations by patient ID
 router.get('/:id', getObservation); // Get specific observation by ID
 router.get('/', getAllObservations); // Get all observations
 router.post('/', createObservation); // Create a new observation

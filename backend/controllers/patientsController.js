@@ -169,8 +169,3 @@ export const updatePatient = async (req, res) => {
         res.status(500).json({ error: 'Internal server error' });
     }
 };
-
-export const printMiddleware = (req, res, next) => {
-    console.log('Middleware triggered CACA');
-    next();
-}

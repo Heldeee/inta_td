@@ -1,4 +1,3 @@
-
 import mongoose from 'mongoose';
 
 const encounterSchema = new mongoose.Schema({

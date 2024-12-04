@@ -1,8 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import '../styles/PatientDetail.css';
+import ObservationsList from './ObservationsList';
+import EncountersList from './EncountersList';
 
 const PatientDetail = ({ patient: initialPatient }) => {
+    const [activeTab, setActiveTab] = useState('overall');
+    const [encounters, setEncounters] = useState([]);
+    const [observations, setObservations] = useState([]);
     const [cabinet, setCabinet] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
@@ -34,6 +39,29 @@ const PatientDetail = ({ patient: initialPatient }) => {
         setPatient(initialPatient);
         setEditedPatient(initialPatient);
     }, [initialPatient]);
+
+    useEffect(() => {
+        const fetchEncounters = async () => {
+            try {
+                const response = await axios.get(`http://localhost:5000/api/encounters/patient/${patient._id}`);
+                setEncounters(response.data);
+            } catch (error) {
+                console.error('Error fetching encounters:', error);
+            }
+        };
+
+        const fetchObservations = async () => {
+            try {
+                const response = await axios.get(`http://localhost:5000/api/observations/patient/${patient._id}`);
+                setObservations(response.data);
+            } catch (error) {
+                console.error('Error fetching observations:', error);
+            }
+        };
+
+        fetchEncounters();
+        fetchObservations();
+    }, [patient._id]);
 
     const sendPatientToFhir = async () => {
         try {
@@ -82,31 +110,8 @@ const PatientDetail = ({ patient: initialPatient }) => {
         return <div>{error}</div>;
     }
 
-    return (
-        <div className="patient-detail">
-            <div className="detail-header">
-                <div>
-                    <h2 className="detail-title">Patient Details</h2>
-                    <div className="button-group">
-                        <button onClick={sendPatientToFhir} className="fhir-button">
-                            Send to FHIR
-                        </button>
-                        {!isEditing ? (
-                            <button onClick={handleEdit} className="edit-button">
-                                Edit Patient
-                            </button>
-                        ) : (
-                            <button onClick={handleSubmit} className="save-button">
-                                Save Changes
-                            </button>
-                        )}
-                    </div>
-                </div>
-                {patient.photo && (
-                    <img src={patient.photo} alt={`${patient.name}'s photo`} className="patient-photo" />
-                )}
-            </div>
-
+    const renderOverallTab = () => (
+        <>
             <div className="section-block">
                 <h3 className="section-block-title">General Information</h3>
                 <div className="info-grid">
@@ -222,6 +227,76 @@ const PatientDetail = ({ patient: initialPatient }) => {
                     </div>
                 </div>
             )}
+        </>
+    );
+
+    const renderEncountersTab = () => (
+        <div className="section-block">
+            <h3 className="section-block-title">Patient Encounters</h3>
+            <EncountersList encounters={encounters} />
+        </div>
+    );
+
+    const renderObservationsTab = () => (
+        <div className="section-block">
+            <h3 className="section-block-title">All Observations</h3>
+            <ObservationsList observations={observations} />
+        </div>
+    );
+
+    return (
+        <div className="patient-detail">
+            <div className="detail-header">
+                <div>
+                    <h2 className="detail-title">Patient Details</h2>
+                    <div className="button-group">
+                        <button onClick={sendPatientToFhir} className="fhir-button">
+                            Send to FHIR
+                        </button>
+                        {!isEditing ? (
+                            <button onClick={handleEdit} className="edit-button">
+                                Edit Patient
+                            </button>
+                        ) : (
+                            <button onClick={handleSubmit} className="save-button">
+                                Save Changes
+                            </button>
+                        )}
+                    </div>
+                </div>
+                {patient.photo && (
+                    <img src={patient.photo} alt={`${patient.name}'s photo`} className="patient-photo" />
+                )}
+            </div>
+
+            <div className="tabs-container">
+                <div className="tabs-header">
+                    <button
+                        className={`tab-button ${activeTab === 'overall' ? 'active' : ''}`}
+                        onClick={() => setActiveTab('overall')}
+                    >
+                        Overall Information
+                    </button>
+                    <button
+                        className={`tab-button ${activeTab === 'encounters' ? 'active' : ''}`}
+                        onClick={() => setActiveTab('encounters')}
+                    >
+                        Encounters
+                    </button>
+                    <button
+                        className={`tab-button ${activeTab === 'observations' ? 'active' : ''}`}
+                        onClick={() => setActiveTab('observations')}
+                    >
+                        Observations
+                    </button>
+                </div>
+
+                <div className="tab-content">
+                    {activeTab === 'overall' && renderOverallTab()}
+                    {activeTab === 'encounters' && renderEncountersTab()}
+                    {activeTab === 'observations' && renderObservationsTab()}
+                </div>
+            </div>
         </div>
     );
 };

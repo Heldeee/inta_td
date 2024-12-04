@@ -1,4 +1,3 @@
-
 import Observation from '../models/Observation.js';
 
 // Get observation by ID
@@ -11,6 +10,17 @@ export const getObservation = async (req, res) => {
         res.json(observation);
     } catch (error) {
         console.error('Error fetching observation:', error);
+        res.status(500).json({ error: 'Internal server error' });
+    }
+};
+
+// Get observations by patient ID
+export const getObservationsByPatient = async (req, res) => {
+    try {
+        const observations = await Observation.find({ subject: req.params.patientId });
+        res.json(observations);
+    } catch (error) {
+        console.error('Error fetching observations:', error);
         res.status(500).json({ error: 'Internal server error' });
     }
 };
