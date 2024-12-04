@@ -14,6 +14,7 @@ import PatientInfo from './PatientInfo';
 import PatientDetail from './PatientDetail';
 import AlertsList from './AlertsList';
 import TransferPatientForm from './TransferPatientForm';
+import UploadFHIR from './UploadFHIR';
 import '../styles/DashboardPage.css';
 
 const DashboardPage = () => {
@@ -76,12 +77,16 @@ const DashboardPage = () => {
                     <h2 className="sidebar-title">
                         <Users className="sidebar-icon" /> Patients
                     </h2>
-                    <button
-                        onClick={handleAddPatient}
-                        className="add-button"
-                    >
-                        <PlusCircle size={20} />
-                    </button>
+                    <div className="add-upload-buttons">
+                        <button
+                            onClick={handleAddPatient}
+                            className="add-button"
+                        >
+                            <PlusCircle size={20} />
+                            Add Patient
+                        </button>
+                        <UploadFHIR className="upload-button" />
+                    </div>
                 </div>
                 <div className="sidebar-content">
                     <PatientInfo

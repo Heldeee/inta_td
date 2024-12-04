@@ -1,0 +1,22 @@
+{
+  "name": "Jack, John",
+  "active": true,
+  "dateOfBirth": "1990-02-12",
+  "gender": "male",
+  "cabinetId": "675077b52d5846ed6bfe6912",
+  "urgentContact": {
+    "name": "Jane Doe",
+    "phoneNumber": "+1 123 456 7890"
+  },
+  "telecom": [
+    {
+      "system": "phone",
+      "value": "+1 987 654 3210",
+      "use": "home"
+    }
+  ],
+  "deceased": false,
+  "maritalStatus": "single",
+  "photo": "",
+  "generalPractitioner": null
+}
