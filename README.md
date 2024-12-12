@@ -19,12 +19,11 @@ docker-compose down -v
 
 ## Keycloak
 
-Already setup login:
+Already setup login for testing purposes:
 
-- doctor1 - password: all logs need to be setup like name etc.
-- doctor2 - password: all logs already setup, direct acess to the dashboard
-- secretary1 - password: all logs need to be setup like name etc.
-- patient1 - password: all logs need to be setup like name etc.
+- doctor1 - password: all logs already setup, direct acess to the dashboard
+- doctor2 - password: all logs need to be setup like name etc.
+- secretary1 - all logs already setup, direct acess to the dashboard
 
 ### Authors
 
@@ -53,8 +52,10 @@ Already setup login:
     - [x] Change patient of cabinet
 
 - [x] Patient
-  - [x] See profile
-  - [x] See medical history
+  We chose not to implement a patient dashboard because the patient is not supposed to have access to the application, the patient is supposed to be a resource that the doctor and the secretary can manage.
+
+- [x] Admin
+  An admin has access to the configuration file but does not have an specific dashboard or role, it is summon when the cabinet needs it, to create a new doctor or secretary or cabinet.
 ## Database
 
 The application uses MongoDB to store patient data and Keycloak with PostgreSQL for authentication and authorization.

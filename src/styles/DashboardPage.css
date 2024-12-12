@@ -223,3 +223,37 @@
         transform: rotate(360deg);
     }
 }
+
+.action-buttons {
+    display: flex;
+    gap: 10px;
+    margin-top: 1rem;
+}
+
+.action-button {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 16px;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+    font-weight: 500;
+    transition: all 0.2s ease;
+}
+
+.action-button.primary {
+    background-color: #2563eb;
+    color: white;
+}
+
+.action-button.primary:hover {
+    background-color: #1d4ed8;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+
+.action-button svg {
+    width: 18px;
+    height: 18px;
+}

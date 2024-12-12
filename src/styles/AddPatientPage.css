@@ -30,19 +30,26 @@
 }
 
 .upload-button {
-    display: inline-block;
-    padding: 0.5rem 1rem;
-    margin-top: 1rem;
-    background-color: #3182ce;
-    color: #fff;
-    border: none;
-    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 20px;
+    background-color: #4f46e5;
+    color: white;
+    border-radius: 8px;
     cursor: pointer;
-    text-align: center;
+    transition: all 0.2s ease;
 }
 
 .upload-button:hover {
-    background-color: #2b6cb0;
+    background-color: #4338ca;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+
+.upload-button svg {
+    width: 20px;
+    height: 20px;
 }
 
 .upload-error {
@@ -53,4 +60,84 @@
 .upload-success {
     color: green;
     margin-top: 1rem;
+}
+
+.page-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    max-width: 1200px;
+    margin-bottom: 2rem;
+    padding: 1rem 2rem;
+    background-color: white;
+    border-radius: 12px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.upload-section {
+    display: flex;
+    align-items: center;
+}
+
+.json-upload-button {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 20px;
+    background-color: #f8fafc;
+    border: 2px dashed #cbd5e1;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    min-width: 250px;
+}
+
+.json-upload-button:hover {
+    border-color: #3b82f6;
+    background-color: #f0f9ff;
+}
+
+.json-upload-button.success {
+    border-color: #22c55e;
+    background-color: #f0fdf4;
+}
+
+.json-upload-button.error {
+    border-color: #ef4444;
+    background-color: #fef2f2;
+}
+
+.json-upload-button .json-icon {
+    color: #64748b;
+    transition: color 0.2s ease;
+}
+
+.json-upload-button:hover .json-icon {
+    color: #3b82f6;
+}
+
+.json-upload-button.success .json-icon {
+    color: #22c55e;
+}
+
+.json-upload-button.error .json-icon {
+    color: #ef4444;
+}
+
+.upload-text {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.upload-title {
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: #1e293b;
+}
+
+.upload-subtitle {
+    font-size: 0.75rem;
+    color: #64748b;
 }

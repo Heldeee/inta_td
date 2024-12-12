@@ -2,8 +2,8 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import '../styles/AddPatientForm.css';
 
-const AddPatientForm = ({ onClose }) => {
-    const [formData, setFormData] = useState({
+const AddPatientForm = ({ onClose, initialData }) => {
+    const [formData, setFormData] = useState(initialData || {
         name: '',
         active: true,
         dateOfBirth: '',
@@ -67,6 +67,12 @@ const AddPatientForm = ({ onClose }) => {
             setFilteredPractitioners([]);
         }
     }, [formData.cabinetId, practitioners]);
+
+    useEffect(() => {
+        if (initialData) {
+            setFormData(initialData);
+        }
+    }, [initialData]);
 
     const handleChange = (e) => {
         const { name, value } = e.target;

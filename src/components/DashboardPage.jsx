@@ -8,7 +8,7 @@ import {
     getToken,
     getUserInfo,
 } from '../services/keycloakService';
-import { Users, FileText, Stethoscope, LogOut, PlusCircle, Loader } from 'lucide-react';
+import { Users, FileText, Stethoscope, LogOut, PlusCircle, Loader, Upload } from 'lucide-react';
 
 import PatientInfo from './PatientInfo';
 import PatientDetail from './PatientDetail';
@@ -77,15 +77,15 @@ const DashboardPage = () => {
                     <h2 className="sidebar-title">
                         <Users className="sidebar-icon" /> Patients
                     </h2>
-                    <div className="add-upload-buttons">
+                    <div className="action-buttons">
                         <button
                             onClick={handleAddPatient}
-                            className="add-button"
+                            className="action-button primary"
+                            title="Add new patient"
                         >
                             <PlusCircle size={20} />
-                            Add Patient
+                            <span>New Patient</span>
                         </button>
-                        <UploadFHIR className="upload-button" />
                     </div>
                 </div>
                 <div className="sidebar-content">
@@ -126,6 +126,7 @@ const DashboardPage = () => {
                             <PatientDetail
                                 patient={selectedPatient}
                                 onTransferPatient={() => setIsTransferPatientModalOpen(true)}
+                                userRole={userRole}
                             />
                             {userRole === 'doctor' && (
                                 <div className="alerts-section">

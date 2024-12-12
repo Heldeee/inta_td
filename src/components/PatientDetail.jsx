@@ -4,7 +4,7 @@ import '../styles/PatientDetail.css';
 import ObservationsList from './ObservationsList';
 import EncountersList from './EncountersList';
 
-const PatientDetail = ({ patient: initialPatient }) => {
+const PatientDetail = ({ patient: initialPatient, userRole }) => {
     const [activeTab, setActiveTab] = useState('overall');
     const [encounters, setEncounters] = useState([]);
     const [observations, setObservations] = useState([]);
@@ -110,6 +110,33 @@ const PatientDetail = ({ patient: initialPatient }) => {
         return <div>{error}</div>;
     }
 
+    const renderTabButtons = () => (
+        <div className="tabs-header">
+            <button
+                className={`tab-button ${activeTab === 'overall' ? 'active' : ''}`}
+                onClick={() => setActiveTab('overall')}
+            >
+                Overall Information
+            </button>
+            {userRole === 'doctor' && (
+                <>
+                    <button
+                        className={`tab-button ${activeTab === 'encounters' ? 'active' : ''}`}
+                        onClick={() => setActiveTab('encounters')}
+                    >
+                        Encounters
+                    </button>
+                    <button
+                        className={`tab-button ${activeTab === 'observations' ? 'active' : ''}`}
+                        onClick={() => setActiveTab('observations')}
+                    >
+                        Observations
+                    </button>
+                </>
+            )}
+        </div>
+    );
+
     const renderOverallTab = () => (
         <>
             <div className="section-block">
@@ -198,34 +225,38 @@ const PatientDetail = ({ patient: initialPatient }) => {
                 </div>
             )}
 
-            {patient.urgentContact && (
-                <div className="section-block">
-                    <h3 className="section-block-title">Emergency Contact</h3>
-                    <div className="info-grid">
-                        <div className="info-item">
-                            <span className="info-label">Name</span>
-                            <span className="info-value">{patient.urgentContact.name}</span>
-                        </div>
-                        <div className="info-item">
-                            <span className="info-label">Phone Number</span>
-                            <span className="info-value">{patient.urgentContact.phoneNumber}</span>
-                        </div>
-                    </div>
-                </div>
-            )}
-
-            {patient.telecom && (
-                <div className="section-block">
-                    <h3 className="section-block-title">Contact Information</h3>
-                    <div className="info-grid">
-                        {patient.telecom.map((contact, index) => (
-                            <div key={index} className="info-item">
-                                <span className="info-label">{contact.system}</span>
-                                <span className="info-value">{contact.value} ({contact.use})</span>
+            {userRole === 'doctor' && (
+                <>
+                    {patient.urgentContact && (
+                        <div className="section-block">
+                            <h3 className="section-block-title">Emergency Contact</h3>
+                            <div className="info-grid">
+                                <div className="info-item">
+                                    <span className="info-label">Name</span>
+                                    <span className="info-value">{patient.urgentContact.name}</span>
+                                </div>
+                                <div className="info-item">
+                                    <span className="info-label">Phone Number</span>
+                                    <span className="info-value">{patient.urgentContact.phoneNumber}</span>
+                                </div>
                             </div>
-                        ))}
-                    </div>
-                </div>
+                        </div>
+                    )}
+
+                    {patient.telecom && (
+                        <div className="section-block">
+                            <h3 className="section-block-title">Contact Information</h3>
+                            <div className="info-grid">
+                                {patient.telecom.map((contact, index) => (
+                                    <div key={index} className="info-item">
+                                        <span className="info-label">{contact.system}</span>
+                                        <span className="info-value">{contact.value} ({contact.use})</span>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+                    )}
+                </>
             )}
         </>
     );
@@ -250,9 +281,11 @@ const PatientDetail = ({ patient: initialPatient }) => {
                 <div>
                     <h2 className="detail-title">Patient Details</h2>
                     <div className="button-group">
-                        <button onClick={sendPatientToFhir} className="fhir-button">
-                            Send to FHIR
-                        </button>
+                        {userRole === 'doctor' && (
+                            <button onClick={sendPatientToFhir} className="fhir-button">
+                                Send to FHIR
+                            </button>
+                        )}
                         {!isEditing ? (
                             <button onClick={handleEdit} className="edit-button">
                                 Edit Patient
@@ -270,31 +303,15 @@ const PatientDetail = ({ patient: initialPatient }) => {
             </div>
 
             <div className="tabs-container">
-                <div className="tabs-header">
-                    <button
-                        className={`tab-button ${activeTab === 'overall' ? 'active' : ''}`}
-                        onClick={() => setActiveTab('overall')}
-                    >
-                        Overall Information
-                    </button>
-                    <button
-                        className={`tab-button ${activeTab === 'encounters' ? 'active' : ''}`}
-                        onClick={() => setActiveTab('encounters')}
-                    >
-                        Encounters
-                    </button>
-                    <button
-                        className={`tab-button ${activeTab === 'observations' ? 'active' : ''}`}
-                        onClick={() => setActiveTab('observations')}
-                    >
-                        Observations
-                    </button>
-                </div>
-
+                {renderTabButtons()}
                 <div className="tab-content">
                     {activeTab === 'overall' && renderOverallTab()}
-                    {activeTab === 'encounters' && renderEncountersTab()}
-                    {activeTab === 'observations' && renderObservationsTab()}
+                    {userRole === 'doctor' && (
+                        <>
+                            {activeTab === 'encounters' && renderEncountersTab()}
+                            {activeTab === 'observations' && renderObservationsTab()}
+                        </>
+                    )}
                 </div>
             </div>
         </div>
