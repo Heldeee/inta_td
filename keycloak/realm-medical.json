@@ -27,7 +27,7 @@
     ],
     "users": [
         {
-            "username": "doctor1",
+            "username": "doctor2",
             "enabled": true,
             "credentials": [
                 {
@@ -40,10 +40,10 @@
             ]
         },
         {
-            "username": "doctor2",
+            "username": "doctor1",
             "enabled": true,
-            "firstName": "Jean",
-            "lastName": "Clenche",
+            "firstName": "John",
+            "lastName": "Doe",
             "email": "doctor1@example.com",
             "credentials": [
                 {
@@ -58,6 +58,9 @@
         {
             "username": "secretary1",
             "enabled": true,
+            "firstName": "Jane",
+            "lastName": "Doe",
+            "email": "secretary1@example.com",
             "credentials": [
                 {
                     "type": "password",
