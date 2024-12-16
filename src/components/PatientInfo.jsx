@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import { getAllPatients } from '../services/patientService';
+import { getCabinet } from '../services/cabinetService';
 import { Search, User } from 'lucide-react';
 import '../styles/PatientInfo.css';
 
-const PatientsInfo = ({ onSelectPatient, selectedPatient }) => {
+const PatientsInfo = ({ onSelectPatient, selectedPatient, onPatientCount }) => {
     const [patients, setPatients] = useState([]);
     const [filteredPatients, setFilteredPatients] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -20,9 +21,10 @@ const PatientsInfo = ({ onSelectPatient, selectedPatient }) => {
     useEffect(() => {
         const fetchPatients = async () => {
             try {
-                const response = await axios.get('http://localhost:5000/api/patients');
-                setPatients(response.data);
-                setFilteredPatients(response.data);
+                const data = await getAllPatients();
+                setPatients(data);
+                setFilteredPatients(data);
+                onPatientCount(data.length);
                 setLoading(false);
             } catch (error) {
                 setError('Error fetching patients data');
@@ -31,15 +33,15 @@ const PatientsInfo = ({ onSelectPatient, selectedPatient }) => {
         };
 
         fetchPatients();
-    }, []);
+    }, [onPatientCount]);
 
     useEffect(() => {
         const getPatientCabinet = async () => {
             const cabinetData = {};
             for (const patient of patients) {
                 try {
-                    const response = await axios.get(`http://localhost:5000/api/cabinets/${patient.cabinetId}`);
-                    cabinetData[patient._id] = response.data;
+                    const data = await getCabinet(patient.cabinetId);
+                    cabinetData[patient._id] = data;
                 } catch (error) {
                     console.error(`Error fetching cabinet for patient ${patient._id}:`, error);
                 }

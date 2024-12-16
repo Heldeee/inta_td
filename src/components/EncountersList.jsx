@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import { getAllProfessionals } from '../services/professionalService';
 import '../styles/EncountersList.css';
 
 const EncountersList = ({ encounters }) => {
@@ -25,8 +25,8 @@ const EncountersList = ({ encounters }) => {
     useEffect(() => {
         const fetchPractitioners = async () => {
             try {
-                const response = await axios.get('http://localhost:5000/api/professionals');
-                setPractitioners(response.data);
+                const data = await getAllProfessionals();
+                setPractitioners(data);
                 setLoading(false);
             } catch (error) {
                 setError('Error fetching practitioners data');

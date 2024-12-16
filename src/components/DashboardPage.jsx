@@ -14,7 +14,6 @@ import PatientInfo from './PatientInfo';
 import PatientDetail from './PatientDetail';
 import AlertsList from './AlertsList';
 import TransferPatientForm from './TransferPatientForm';
-import UploadFHIR from './UploadFHIR';
 import '../styles/DashboardPage.css';
 
 const DashboardPage = () => {
@@ -25,6 +24,7 @@ const DashboardPage = () => {
     const [alerts, setAlerts] = useState([]);
     const [isTransferPatientModalOpen, setIsTransferPatientModalOpen] = useState(false);
     const [userInfo, setUserInfo] = useState(null);
+    const [patientCount, setPatientCount] = useState(0);
 
     useEffect(() => {
         if (!isAuthenticated()) {
@@ -39,7 +39,7 @@ const DashboardPage = () => {
                 const userDetails = getUserInfo();
                 setUserRole(roles[0]);
                 setUserInfo(userDetails);
-                console.log('User connected:', userDetails.preferred_username);
+                console.log('User connected:', userDetails);
                 console.log('User roles:', roles);
                 setLoading(false);
             } catch (error) {
@@ -60,6 +60,10 @@ const DashboardPage = () => {
         navigate('/add-patient');
     };
 
+    const handlePatientCount = (count) => {
+        setPatientCount(count);
+    };
+
     if (loading) {
         return (
             <div className="loading-screen">
@@ -75,7 +79,9 @@ const DashboardPage = () => {
             <div className="sidebar">
                 <div className="sidebar-header">
                     <h2 className="sidebar-title">
-                        <Users className="sidebar-icon" /> Patients
+                        <Users size={24} />
+                        Patients
+                        <span className="patient-count">{patientCount}</span>
                     </h2>
                     <div className="action-buttons">
                         <button
@@ -83,8 +89,8 @@ const DashboardPage = () => {
                             className="action-button primary"
                             title="Add new patient"
                         >
-                            <PlusCircle size={20} />
-                            <span>New Patient</span>
+                            <PlusCircle size={18} />
+                            Add Patient
                         </button>
                     </div>
                 </div>
@@ -94,6 +100,7 @@ const DashboardPage = () => {
                             setSelectedPatient(patient);
                         }}
                         selectedPatient={selectedPatient}
+                        onPatientCount={handlePatientCount}
                     />
                 </div>
             </div>
@@ -106,7 +113,9 @@ const DashboardPage = () => {
                         <h1 className="header-title">Medical Dashboard</h1>
                         {userInfo && (
                             <div className="user-info">
-                                <span className="user-name">{userInfo.preferred_username}</span>
+                                <span className="user-name">
+                                    {userInfo.given_name} {userInfo.family_name}
+                                </span>
                                 <span className="user-role">{userRole}</span>
                             </div>
                         )}
@@ -146,14 +155,6 @@ const DashboardPage = () => {
                     )}
                 </div>
             </div>
-
-            {/* Modals */}
-            {isTransferPatientModalOpen && (
-                <TransferPatientForm
-                    patient={selectedPatient}
-                    onClose={() => setIsTransferPatientModalOpen(false)}
-                />
-            )}
         </div>
     );
 };

@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import { createPatient } from '../services/patientService';
+import { getAllCabinets } from '../services/cabinetService';
+import { getAllProfessionals } from '../services/professionalService';
 import '../styles/AddPatientForm.css';
 
 const AddPatientForm = ({ onClose, initialData }) => {
@@ -32,8 +34,8 @@ const AddPatientForm = ({ onClose, initialData }) => {
     useEffect(() => {
         const fetchPractitioners = async () => {
             try {
-                const response = await axios.get('http://localhost:5000/api/professionals');
-                setPractitioners(response.data);
+                const data = await getAllProfessionals();
+                setPractitioners(data);
                 setLoading(false);
             } catch (error) {
                 setError('Error fetching practitioners data');
@@ -47,8 +49,8 @@ const AddPatientForm = ({ onClose, initialData }) => {
     useEffect(() => {
         const fetchCabinets = async () => {
             try {
-                const response = await axios.get('http://localhost:5000/api/cabinets');
-                setCabinets(response.data);
+                const data = await getAllCabinets();
+                setCabinets(data);
                 setLoading(false);
             } catch (error) {
                 setError('Error fetching cabinets data');
@@ -144,7 +146,7 @@ const AddPatientForm = ({ onClose, initialData }) => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            const response = await axios.post('http://localhost:5000/api/patients', formData);
+            await createPatient(formData);
             setFormData({
                 name: '',
                 active: true,

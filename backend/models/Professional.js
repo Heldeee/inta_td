@@ -5,6 +5,7 @@ const professionalSchema = new mongoose.Schema({
     role: String,
     specialization: String,
     cabinetId: { type: mongoose.Schema.Types.ObjectId, ref: 'Cabinet', required: true },
+    keycloakUsername: String,
 });
 
 const Professional = mongoose.model('Professional', professionalSchema);

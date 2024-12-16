@@ -1,6 +1,7 @@
 import React from 'react';
 import { login, isAuthenticated } from '../services/keycloakService';
 import { useNavigate } from 'react-router-dom';
+import backgroundImage from '../assets/cabinet.jpeg';
 
 const LoginPage = () => {
     const navigate = useNavigate();
@@ -20,39 +21,82 @@ const LoginPage = () => {
     };
 
     return (
-        <div style={{
-            height: '100vh',
-            display: 'flex',
-            flexDirection: 'column',
-            justifyContent: 'center',
-            alignItems: 'center',
-            backgroundColor: '#f5f5f5'
-        }}>
+        <>
+            <style>
+                {`
+                    body {
+                        margin: 0;
+                        overflow: hidden;
+                        font-family: 'Inter', sans-serif;
+                    }
+                `}
+            </style>
             <div style={{
-                padding: '2rem',
-                backgroundColor: 'white',
-                borderRadius: '8px',
-                boxShadow: '0 2px 4px rgba(0,0,0,0.1)'
+                position: 'fixed',
+                width: '100vw',
+                height: '100vh',
+                display: 'flex',
+                flexDirection: 'column',
+                justifyContent: 'center',
+                alignItems: 'center',
+                backgroundImage: `url(${backgroundImage})`,
+                backgroundSize: 'cover',
+                backgroundPosition: 'center',
+                overflow: 'hidden',
             }}>
-                <h1 style={{ marginBottom: '1.5rem', color: '#333' }}>
-                    Medical Cabinet Login
-                </h1>
-                <button
-                    onClick={handleLogin}
-                    style={{
-                        padding: '0.75rem 1.5rem',
-                        backgroundColor: '#007bff',
-                        color: 'white',
-                        border: 'none',
-                        borderRadius: '4px',
-                        cursor: 'pointer',
-                        fontSize: '1rem'
-                    }}
-                >
-                    Se connecter avec Keycloak
-                </button>
+                <div style={{
+                    padding: '3rem',
+                    backgroundColor: 'rgba(255, 255, 255, 0.95)',
+                    borderRadius: '16px',
+                    boxShadow: '0 8px 32px rgba(0,0,0,0.1)',
+                    backdropFilter: 'blur(8px)',
+                    maxWidth: '400px',
+                    width: '90%',
+                }}>
+                    <h1 style={{
+                        marginBottom: '2rem',
+                        color: '#2d3748',
+                        fontSize: '2.25rem',
+                        textAlign: 'center',
+                        fontWeight: '600',
+                        letterSpacing: '-0.025em'
+                    }}>
+                        Medical Cabinet
+                    </h1>
+                    <p style={{
+                        marginBottom: '2rem',
+                        color: '#4a5568',
+                        textAlign: 'center',
+                        fontSize: '1.125rem',
+                        lineHeight: '1.75',
+                        fontWeight: '400'
+                    }}>
+                        Please login to access your medical dashboard
+                    </p>
+                    <button
+                        onClick={handleLogin}
+                        style={{
+                            width: '100%',
+                            padding: '1rem',
+                            backgroundColor: '#4299e1',
+                            color: 'white',
+                            border: 'none',
+                            borderRadius: '8px',
+                            cursor: 'pointer',
+                            fontSize: '1rem',
+                            fontWeight: '500',
+                            transition: 'all 0.2s ease',
+                            boxShadow: '0 2px 4px rgba(66, 153, 225, 0.3)',
+                            letterSpacing: '0.025em'
+                        }}
+                        onMouseOver={e => e.currentTarget.style.backgroundColor = '#3182ce'}
+                        onMouseOut={e => e.currentTarget.style.backgroundColor = '#4299e1'}
+                    >
+                        Connect with Keycloak
+                    </button>
+                </div>
             </div>
-        </div>
+        </>
     );
 };
 

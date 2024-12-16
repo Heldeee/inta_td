@@ -14,6 +14,20 @@ export const getProfessionalInfo = async (req, res) => {
     }
 };
 
+// Get professional information by Keycloak ID
+export const getProfessionalInfoByKeycloak = async (req, res) => {
+    try {
+        const professional = await Professional.findOne({ keycloakUsername: req.params.username });
+        if (!professional) {
+            return res.status(404).json({ error: 'Professional not found' });
+        }
+        res.json(professional);
+    } catch (error) {
+        console.error('Error fetching professional data:', error);
+        res.status(500).json({ error: 'Internal server error' });
+    }
+};
+
 // Get all professionals
 export const getAllProfessionals = async (req, res) => {
     try {

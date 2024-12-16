@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import { getAllCabinets } from '../services/cabinetService';
 
 const CabinetInfo = () => {
     const [cabinets, setCabinets] = useState([]);
@@ -12,9 +13,9 @@ const CabinetInfo = () => {
     useEffect(() => {
         const fetchCabinets = async () => {
             try {
-                const response = await axios.get('http://localhost:5000/api/cabinets');
-                setCabinets(response.data);
-                setFilteredCabinets(response.data); // Initially show all cabinets
+                const data = await getAllCabinets();
+                setCabinets(data);
+                setFilteredCabinets(data); // Initially show all cabinets
                 setLoading(false);
             } catch (error) {
                 setError('Error fetching cabinets data');

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import { getDevices, getDevice, getDeviceRecords } from '../services/medicalRecordService';
 import '../styles/MedicalRecordsList.css'; // Import the CSS file
 
 const MedicalRecordsList = () => {
@@ -16,8 +16,8 @@ const MedicalRecordsList = () => {
     useEffect(() => {
         const fetchDevices = async () => {
             try {
-                const response = await axios.get('http://localhost:5000/api/devices');
-                setDevices(response.data);
+                const data = await getDevices();
+                setDevices(data);
                 setLoading(false);
             } catch (error) {
                 setError('Error fetching devices data');
@@ -32,18 +32,15 @@ const MedicalRecordsList = () => {
         setSelectedDevice(deviceId);
         setLoading(true);
         try {
-            const response = await axios.get(`http://localhost:5000/api/devices/${deviceId}`);
-            setRecords(response.data);
-            setLoading(false);
-
+            const deviceData = await getDevice(deviceId);
+            setRecords(deviceData);
             try {
-                const response2 = await axios.get(`http://localhost:5000/api/devices/${deviceId}/records`);
-            }
-            catch (error) {
+                const recordsData = await getDeviceRecords(deviceId);
+                // Handle records data as needed
+            } catch (error) {
                 setError('Error fetching medical records');
                 setLoading(false);
             }
-
         } catch (error) {
             setError('Error fetching medical records');
             setLoading(false);

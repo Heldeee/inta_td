@@ -47,3 +47,18 @@ export const disconnectDevice = async (patientId, deviceId) => {
         throw error;
     }
 };
+
+export const addDevice = async (deviceData) => {
+    try {
+        const keycloak = getKeycloakInstance();
+        const response = await axios.post(API_URL, deviceData, {
+            headers: {
+                Authorization: `Bearer ${keycloak.token}`,
+            },
+        });
+        return response.data;
+    } catch (error) {
+        console.error('Error adding device:', error);
+        throw error;
+    }
+};

@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import { getPatients } from '../services/patientService';
+import { getProfessionals } from '../services/professionalService';
+import { addDevice } from '../services/deviceService';
 
 const AddDeviceForm = ({ onClose }) => {
     const [formData, setFormData] = useState({
@@ -12,16 +14,15 @@ const AddDeviceForm = ({ onClose }) => {
     const [filteredPatients, setFilteredPatients] = useState([]);
     const [filteredDoctors, setFilteredDoctors] = useState([]);
 
-    // Fetch patients and doctors on component mount
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const patientsResponse = await axios.get('http://localhost:5000/api/patients');
-                const doctorsResponse = await axios.get('http://localhost:5000/api/professionals');
-                setPatients(patientsResponse.data);
-                setDoctors(doctorsResponse.data);
-                setFilteredPatients(patientsResponse.data); // Initially, show all patients
-                setFilteredDoctors(doctorsResponse.data); // Initially, show all doctors
+                const patientsData = await getPatients();
+                const doctorsData = await getProfessionals();
+                setPatients(patientsData);
+                setDoctors(doctorsData);
+                setFilteredPatients(patientsData);
+                setFilteredDoctors(doctorsData);
             } catch (error) {
                 console.error('Error fetching data:', error);
             }
@@ -29,7 +30,6 @@ const AddDeviceForm = ({ onClose }) => {
         fetchData();
     }, []);
 
-    // Handle form input changes
     const handleChange = (e) => {
         const { name, value } = e.target;
         setFormData((prevState) => ({
@@ -37,7 +37,6 @@ const AddDeviceForm = ({ onClose }) => {
             [name]: value
         }));
 
-        // Filter patients or doctors based on input
         if (name === 'patientId') {
             const searchValue = value.toLowerCase();
             setFilteredPatients(patients.filter(patient =>
@@ -54,28 +53,19 @@ const AddDeviceForm = ({ onClose }) => {
     const handleSubmit = async (e) => {
         e.preventDefault();
 
-        // Ensure formData is correct
-        console.log(formData);
-
-        // Validate that all required fields are present
         if (!formData.patientId || !formData.doctorId) {
             alert('Patient ID and Doctor ID are required');
             return;
         }
 
-        // Set the device type automatically here, for example:
         const updatedFormData = {
             ...formData,
-            type: 'Blood Pressure' // Default or auto-determined device type
+            type: 'Blood Pressure'
         };
 
         try {
-            console.log('Adding device:', updatedFormData);
-            // Send the data to the backend
-            const response = await axios.post('http://localhost:5000/api/devices', updatedFormData);
+            await addDevice(updatedFormData);
             alert('Device added successfully!');
-
-            // Reset the form
             setFormData({
                 patientId: '',
                 doctorId: '',

@@ -2,6 +2,13 @@
     padding: 0.5rem;
     width: 100%;
     overflow-x: hidden;
+    box-sizing: border-box;
+}
+
+.search-container {
+    width: 100%;
+    padding: 0 0.5rem;
+    box-sizing: border-box;
 }
 
 .search-input {
@@ -12,6 +19,7 @@
     margin-bottom: 1rem;
     background-color: #f8fafc;
     transition: all 0.2s;
+    box-sizing: border-box;
 }
 
 .search-input:focus {
@@ -28,6 +36,8 @@
     overflow-y: auto;
     width: 100%;
     overflow-x: hidden;
+    box-sizing: border-box;
+    padding: 0 0.5rem;
 }
 
 .patient-card {
