@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { getAllProfessionals } from '../services/professionalService';
 import '../styles/EncountersList.css';
+import NewEncounterModal from './NewEncounterModal';
 
-const EncountersList = ({ encounters }) => {
+const EncountersList = ({ encounters, patientId, onEncounterCreated }) => {
     const [practitioners, setPractitioners] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
+    const [showNewEncounterModal, setShowNewEncounterModal] = useState(false);
 
     const formatDateTime = (dateString) => {
         if (!dateString) return 'No date provided';
@@ -45,7 +47,28 @@ const EncountersList = ({ encounters }) => {
 
     return (
         <div className="encounters-container">
-            <h2 className="encounters-title">Patient Encounters</h2>
+            <div className="encounters-header">
+                <h2 className="encounters-title">Patient Encounters</h2>
+                <button
+                    className="new-encounter-button"
+                    onClick={() => setShowNewEncounterModal(true)}
+                >
+                    New Encounter
+                </button>
+            </div>
+
+            {showNewEncounterModal && (
+                <NewEncounterModal
+                    patientId={patientId}
+                    practitioners={practitioners}
+                    onClose={() => setShowNewEncounterModal(false)}
+                    onEncounterCreated={(newEncounter) => {
+                        onEncounterCreated(newEncounter);
+                        setShowNewEncounterModal(false);
+                    }}
+                />
+            )}
+
             <div className="encounters-list">
                 {encounters.map(encounter => (
                     <div key={encounter._id} className="encounter-item">

@@ -1,7 +1,11 @@
-import React from 'react';
+import React, { useState } from 'react';
 import '../styles/ObservationsList.css';
+import NewObservationModal from './NewObservationModal';
 
-const ObservationsList = ({ observations }) => {
+const ObservationsList = ({ observations, patientId }) => {  // Ensure patientId is in props
+    const [showNewObservationModal, setShowNewObservationModal] = useState(false);
+    const [observationsList, setObservationsList] = useState(observations);
+
     const getInterpretationColor = (interpretation) => {
         switch (interpretation?.[0]?.toLowerCase()) {
             case 'normal': return 'interpretation-normal';
@@ -13,9 +17,29 @@ const ObservationsList = ({ observations }) => {
 
     return (
         <div className="observations-section">
-            <h2 className="section-title">Observations</h2>
+            <div className="observations-header">
+                <h2 className="section-title">Observations</h2>
+                <button
+                    className="new-observation-button"
+                    onClick={() => setShowNewObservationModal(true)}
+                >
+                    New Observation
+                </button>
+            </div>
+
+            {showNewObservationModal && (
+                <NewObservationModal
+                    patientId={patientId}  // Make sure this prop is passed
+                    onClose={() => setShowNewObservationModal(false)}
+                    onObservationCreated={(newObservation) => {
+                        setObservationsList([...observationsList, newObservation]);
+                        setShowNewObservationModal(false);
+                    }}
+                />
+            )}
+
             <div className="observations-grid">
-                {observations.map(observation => (
+                {observationsList.map(observation => (
                     <div key={observation._id} className="observation-card">
                         <div className="observation-header">
                             <span className="observation-type">{observation.code}</span>

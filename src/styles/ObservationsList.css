@@ -106,3 +106,26 @@
     font-weight: 500;
     color: #1e293b;
 }
+
+.observations-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+}
+
+.new-observation-button {
+    padding: 0.75rem 1.5rem;
+    background-color: #3b82f6;
+    color: white;
+    border: none;
+    border-radius: 0.5rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.new-observation-button:hover {
+    background-color: #2563eb;
+    transform: translateY(-1px);
+}

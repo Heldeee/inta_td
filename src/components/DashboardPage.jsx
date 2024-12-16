@@ -39,8 +39,6 @@ const DashboardPage = () => {
                 const userDetails = getUserInfo();
                 setUserRole(roles[0]);
                 setUserInfo(userDetails);
-                console.log('User connected:', userDetails);
-                console.log('User roles:', roles);
                 setLoading(false);
             } catch (error) {
                 console.error('Error fetching dashboard data:', error);

@@ -94,6 +94,12 @@ The application uses MongoDB to store patient data and Keycloak with PostgreSQL 
 - GET /api/cabinets: Retrieve a list of all cabinets.
 - GET /api/cabinets/:id: Retrieve cabinet data by ID.
 
+### Professionals
+
+- GET /api/professionals: Retrieve a list of all professionals.
+- GET /api/professionals/:id: Retrieve professional data by ID.
+- POST /api/professionals: Create a new professional.
+
 ## Reponses TD2
 
 1. Ressources FHIR nécessaires :

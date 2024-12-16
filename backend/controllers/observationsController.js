@@ -39,12 +39,28 @@ export const getAllObservations = async (req, res) => {
 // Create a new observation
 export const createObservation = async (req, res) => {
     try {
-        const newObservation = new Observation(req.body);
+        // Log the incoming request body for debugging
+        console.log('Creating observation with data:', req.body);
+
+        if (!req.body.subject) {
+            return res.status(400).json({ error: 'Subject (patientId) is required' });
+        }
+
+        const newObservation = new Observation({
+            ...req.body,
+            subject: req.body.subject, // Ensure subject is explicitly set
+            effectiveDateTime: new Date(req.body.effectiveDateTime) // Ensure date is properly formatted
+        });
+
         const savedObservation = await newObservation.save();
         res.status(201).json(savedObservation);
     } catch (error) {
         console.error('Error creating observation:', error);
-        res.status(500).json({ error: 'Internal server error' });
+        res.status(500).json({
+            error: 'Internal server error',
+            details: error.message,
+            validation: error.errors
+        });
     }
 };
 

@@ -264,14 +264,23 @@ const PatientDetail = ({ patient: initialPatient, userRole }) => {
     const renderEncountersTab = () => (
         <div className="section-block">
             <h3 className="section-block-title">Patient Encounters</h3>
-            <EncountersList encounters={encounters} />
+            <EncountersList
+                encounters={encounters}
+                patientId={patient._id}
+                onEncounterCreated={(newEncounter) => {
+                    setEncounters(prev => [...prev, newEncounter]);
+                }}
+            />
         </div>
     );
 
     const renderObservationsTab = () => (
         <div className="section-block">
             <h3 className="section-block-title">All Observations</h3>
-            <ObservationsList observations={observations} />
+            <ObservationsList
+                observations={observations}
+                patientId={patient._id}  // Make sure to pass patientId here
+            />
         </div>
     );
 
