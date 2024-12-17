@@ -1,5 +1,7 @@
 import Patient from '../models/Patient.js';
 import axios from 'axios';
+import Observation from '../models/Observation.js';
+import Encounter from '../models/Encounter.js';
 
 // Get patient data by ID
 export const getPatientInfo = async (req, res) => {
@@ -167,5 +169,38 @@ export const updatePatient = async (req, res) => {
             return res.status(400).json({ error: 'Invalid patient ID format' });
         }
         res.status(500).json({ error: 'Internal server error' });
+    }
+};
+
+export const downloadMedicalFolder = async (req, res) => {
+    try {
+        const patientId = req.params.id;
+
+        // Fetch patient data with populated references
+        const patient = await Patient.findById(patientId)
+            .populate('generalPractitioner')
+            .populate('cabinetId');
+
+        // Fetch all encounters
+        const encounters = await Encounter.find({ subject: patientId })
+            .populate('participant.individual')
+            .populate('diagnosis')
+            .populate('serviceProvider');
+
+        // Fetch all observations
+        const observations = await Observation.find({ subject: patientId })
+            .populate('performer')
+            .populate('encounter');
+
+        const medicalFolder = {
+            patientInfo: patient,
+            encounters: encounters,
+            observations: observations,
+            generatedDate: new Date(),
+        };
+
+        res.json(medicalFolder);
+    } catch (error) {
+        res.status(500).json({ error: error.message });
     }
 };

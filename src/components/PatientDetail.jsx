@@ -74,6 +74,30 @@ const PatientDetail = ({ patient: initialPatient, userRole }) => {
         }
     };
 
+    const downloadMedicalFolder = async () => {
+        try {
+            const response = await axios.get(`http://localhost:5000/api/patients/${patient._id}/medical-folder`);
+            const data = response.data;
+
+            // Create a formatted JSON string
+            const jsonString = JSON.stringify(data, null, 2);
+
+            // Create and trigger download
+            const blob = new Blob([jsonString], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `medical_folder_${patient.name}_${new Date().toISOString().split('T')[0]}.json`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        } catch (error) {
+            console.error('Error downloading medical folder:', error);
+            alert('Error downloading medical folder');
+        }
+    };
+
     const handleEdit = () => {
         setIsEditing(true);
         setEditedPatient(patient);
@@ -292,9 +316,14 @@ const PatientDetail = ({ patient: initialPatient, userRole }) => {
                     <h2 className="detail-title">Patient Details</h2>
                     <div className="button-group">
                         {userRole === 'doctor' && (
-                            <button onClick={sendPatientToFhir} className="fhir-button">
-                                Send to FHIR
-                            </button>
+                            <>
+                                <button onClick={sendPatientToFhir} className="fhir-button">
+                                    Send to FHIR
+                                </button>
+                                <button onClick={downloadMedicalFolder} className="download-button">
+                                    Download Medical Folder
+                                </button>
+                            </>
                         )}
                         {!isEditing ? (
                             <button onClick={handleEdit} className="edit-button">
