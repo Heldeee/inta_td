@@ -1,9 +1,9 @@
 import express from 'express';
 const router = express.Router();
-import { getProfessionalInfo, getAllProfessionals } from '../controllers/professionalsController.js';
+import { getProfessionalInfo, getAllProfessionals, getProfessionalInfoByKeycloakUsername } from '../controllers/professionalsController.js';
 
-router.get('/:id', getProfessionalInfo); // Get professional information by ID
-router.get('keycloak/:username', getProfessionalInfo); // Get professional information by Keycloak ID
-router.get('/', getAllProfessionals); // Get all professionals
+router.get('/keycloak/:username', getProfessionalInfoByKeycloakUsername); // This route must come BEFORE the :id route
+router.get('/:id', getProfessionalInfo);
+router.get('/', getAllProfessionals);
 
 export default router;

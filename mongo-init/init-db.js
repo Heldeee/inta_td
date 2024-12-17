@@ -45,13 +45,15 @@ const professionals = db.professionals.insertMany([
         "name": "Dr. John Doe",
         "role": "Cardiologist",
         "cabinetId": cabinet1Id,
-        "specialization": "Heart Disease"
+        "specialization": "Heart Disease",
+        "keycloakUsername": "doctor1"
     },
     {
         "name": "Dr. Jane Smith",
         "role": "Cardiologist",
         "cabinetId": cabinet2Id,
-        "specialization": "Heart Disease"
+        "specialization": "Heart Disease",
+        "keycloakUsername": "doctor2"
     }
 ]);
 

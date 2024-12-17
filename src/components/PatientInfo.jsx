@@ -1,16 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import { getAllPatients } from '../services/patientService';
 import { getCabinet } from '../services/cabinetService';
-import { Search, User } from 'lucide-react';
+import axios from 'axios';
 import '../styles/PatientInfo.css';
 
-const PatientsInfo = ({ onSelectPatient, selectedPatient, onPatientCount }) => {
+const PatientsInfo = ({ onSelectPatient, selectedPatient, onPatientCount, userInfo, userRole }) => {
     const [patients, setPatients] = useState([]);
     const [filteredPatients, setFilteredPatients] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const [searchQuery, setSearchQuery] = useState('');
-    const [showAddPatientForm, setShowAddPatientForm] = useState(false);
     const [cabinets, setCabinets] = useState({});
 
     const prettyDate = (date) => {
@@ -19,21 +18,35 @@ const PatientsInfo = ({ onSelectPatient, selectedPatient, onPatientCount }) => {
     };
 
     useEffect(() => {
-        const fetchPatients = async () => {
+        const fetchDoctorAndPatients = async () => {
             try {
                 const data = await getAllPatients();
-                setPatients(data);
-                setFilteredPatients(data);
-                onPatientCount(data.length);
+                let filteredData = data;
+
+                if (userRole === 'doctor' && userInfo?.preferred_username) {
+                    // Get professional info using Keycloak username
+                    const professionalResponse = await axios.get(`http://localhost:5000/api/professionals/keycloak/${userInfo.preferred_username}`);
+                    const professional = professionalResponse.data;
+
+                    // Filter patients by cabinet ID
+                    if (professional?.cabinetId) {
+                        filteredData = data.filter(patient => patient.cabinetId === professional.cabinetId);
+                    }
+                }
+
+                setPatients(filteredData);
+                setFilteredPatients(filteredData);
+                onPatientCount(filteredData.length);
                 setLoading(false);
             } catch (error) {
-                setError('Error fetching patients data');
+                console.error('Error:', error);
+                setError('Error fetching data');
                 setLoading(false);
             }
         };
 
-        fetchPatients();
-    }, [onPatientCount]);
+        fetchDoctorAndPatients();
+    }, [onPatientCount, userInfo, userRole]);
 
     useEffect(() => {
         const getPatientCabinet = async () => {

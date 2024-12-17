@@ -64,9 +64,13 @@ const DashboardPage = () => {
 
     if (loading) {
         return (
-            <div className="loading-screen">
-                <Loader className="loading-spinner" size={48} />
-                <span className="loading-text">Loading...</span>
+            <div className="modern-loading-screen">
+                <div className="loading-content">
+                    <Loader className="loading-spinner" size={64} />
+                    <h2 className="loading-title">Starting up services...</h2>
+                    <p className="loading-message">Please wait while Docker containers are launching.</p>
+                    <p className="loading-instruction">If this takes too long, try refreshing the page (F5)</p>
+                </div>
             </div>
         );
     }
@@ -99,6 +103,8 @@ const DashboardPage = () => {
                         }}
                         selectedPatient={selectedPatient}
                         onPatientCount={handlePatientCount}
+                        userInfo={userInfo}  // Add this line
+                        userRole={userRole}  // Add this line
                     />
                 </div>
             </div>

@@ -23,7 +23,7 @@ const App = () => {
   }, []);
 
   if (!initialized) {
-    return <div>Loading...</div>;
+    return <div>Loading... Refresh in a moment.</div>;
   }
 
   return (

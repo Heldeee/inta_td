@@ -38,6 +38,7 @@ const PatientDetail = ({ patient: initialPatient, userRole }) => {
     useEffect(() => {
         setPatient(initialPatient);
         setEditedPatient(initialPatient);
+        setActiveTab('overall');
     }, [initialPatient]);
 
     useEffect(() => {

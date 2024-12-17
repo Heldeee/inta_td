@@ -228,8 +228,9 @@
 }
 
 .loading-spinner {
-    animation: spin 1s linear infinite;
-    color: #a0aec0;
+    animation: spin 2s linear infinite;
+    color: #3b82f6;
+    margin-bottom: 1.5rem;
 }
 
 .loading-text {
@@ -286,4 +287,41 @@
 .action-button svg {
     width: 18px;
     height: 18px;
+}
+
+.modern-loading-screen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #f8fafc;
+}
+
+.loading-content {
+    text-align: center;
+    padding: 2rem;
+    border-radius: 12px;
+    background-color: white;
+    box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+}
+
+.loading-title {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: #1e293b;
+    margin-bottom: 1rem;
+}
+
+.loading-message {
+    color: #64748b;
+    margin-bottom: 0.5rem;
+}
+
+.loading-instruction {
+    color: #94a3b8;
+    font-size: 0.875rem;
 }

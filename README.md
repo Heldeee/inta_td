@@ -36,12 +36,12 @@ Already setup login for testing purposes:
 - Logout
 - Dashboard - Doctor - Secretary - Patient
 - Doctor
-  - See all patients
-  - Create patient
+  - See all patients of their assigned cabinet only
+  - Create patient within their cabinet
   - Transfer patient
     - To FHIR server [Hapi FHIR Base64](https://hapi.fhir.org/baseR4/swagger-ui/?page=Patient)
     - To download resource of a patient
-    - Change patient ofc abinet
+    - Change patient of cabinet
 
 -  Secretary
   -  Assign doctor to cabinet
@@ -62,22 +62,50 @@ The application uses MongoDB to store patient data and Keycloak with PostgreSQL 
 
 
 ## API Endpoints
+
 ### Patients
-- GET /api/patients: Retrieve a list of all patients.
-- GET /api/patients/:id: Retrieve patient data by ID.
-- POST /api/patients: Create a new patient.
-- GET /api/patients/doctor/:doctorId: Retrieve all patients associated with a specific doctor.
-- GET /api/patients/keycloak/:keycloakId: Retrieve patient data by Keycloak ID.
-- POST /api/patients/transfer: Send patient data to the FHIR server.
-### Cabinets
-- GET /api/cabinets: Retrieve a list of all cabinets.
-- GET /api/cabinets/:id: Retrieve cabinet data by ID.
+- GET /api/patients: Get all patients
+- GET /api/patients/:id: Get patient by ID
+- GET /api/patients/doctor/:doctorId: Get all patients for a specific doctor
+- POST /api/patients: Create a new patient
+- POST /api/patients/transfer: Transfer patient data to FHIR server
+- PUT /api/patients/:id: Update patient information
 
 ### Professionals
+- GET /api/professionals: Get all professionals
+- GET /api/professionals/:id: Get professional by ID
+- GET /api/professionals/keycloak/:username: Get professional by Keycloak username
 
-- GET /api/professionals: Retrieve a list of all professionals.
-- GET /api/professionals/:id: Retrieve professional data by ID.
-- POST /api/professionals: Create a new professional.
+### Observations
+- GET /api/observations: Get all observations
+- GET /api/observations/:id: Get observation by ID
+- GET /api/observations/patient/:patientId: Get observations for a specific patient
+- POST /api/observations: Create a new observation
+- PUT /api/observations/:id: Update an observation
+- DELETE /api/observations/:id: Delete an observation
+
+### Medical Records
+- GET /api/medical-records: Get all medical records
+- GET /api/medical-records/:id: Get medical record by ID
+- POST /api/medical-records: Create a new medical record
+
+### Encounters
+- GET /api/encounters: Get all encounters
+- GET /api/encounters/:id: Get encounter by ID
+- GET /api/encounters/patient/:patientId: Get encounters for a specific patient
+- POST /api/encounters: Create a new encounter
+- PUT /api/encounters/:id: Update an encounter
+- DELETE /api/encounters/:id: Delete an encounter
+
+### Devices
+- GET /api/devices: Get all devices
+- GET /api/devices/:deviceId: Get device data by ID
+- GET /api/devices/:deviceId/records: Get device records by ID
+- POST /api/devices: Add a new medical device
+
+### Cabinets
+- GET /api/cabinets: Get all cabinets
+- GET /api/cabinets/:id: Get cabinet by ID
 
 ## Reponses TD2
 
